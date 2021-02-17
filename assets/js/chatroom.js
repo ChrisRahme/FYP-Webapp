@@ -48054,6 +48054,7 @@ parcelRequire = (function (e, r, t, n) {
                                                 { className: "input", onSubmit: this.handleSubmitMessage },
                                                 e.default.createElement("input", { // User input textfield/textarea
                                                     type: "text",
+                                                    placeholder: "Type your message...",
                                                     value: this.state.inputValue,
                                                     onChange: function (e) {
                                                         return r.handleInputChange(e.currentTarget.value);

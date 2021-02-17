@@ -27,9 +27,37 @@
                 chatroom.openChat();
             </script>
         </div>
+
+        <div>
+            <script>!(function () {
+                let e = document.createElement("script"),
+                    t = document.head || document.getElementsByTagName("head")[0];
+                (e.src =
+                    "https://cdn.jsdelivr.net/npm/rasa-webchat/lib/index.js"),
+                    (e.async = !0),
+                    (e.onload = () => {
+                    window.WebChat.default(
+                        {
+                            customData: { language: "en" },
+                            socketUrl: "https://bf-botfront.development.agents.botfront.cloud",
+                            title: "Rasa Assistant",
+                            subtitle: ""
+                        },
+                        null
+                    );
+                    }),
+                    t.insertBefore(e, t.firstChild);
+                })();
+            </script>
+        </div>
         
+        <h2>To start the servers:</h2>
         <p>rasa run actions --cors "*"</p>
         <p>rasa run --enable-api --cors "*" --debug</p>
         
+        <h2>GitHub repos:</h2>
+        <p>Chatroom: https://github.com/scalableminds/chatroom</p>
+        <p>Webchat: https://github.com/botfront/rasa-webchat</p>
+
     </body>
 </html>

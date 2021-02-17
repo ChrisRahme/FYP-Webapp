@@ -7,32 +7,35 @@
     color: #2C3951; /* Color of the loading dots */
     max-height: 90vh;
     background-color: hsla(0, 0%, 78.4%, 0.9);
-    border-radius: 3px;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
+    border-radius: 15px;
     letter-spacing: normal;
     overflow: hidden;
-    box-shadow: 0 0 0 2px hsla(0, 0%, 100%, 0.8);
+    box-shadow: 0 0 15px #888888
 }
 
 .chatroom,
 .chatroom * {
     box-sizing: border-box;
+    font-size: 1.25rem;
 }
 
 .chatroom.closed {
-    height: 40px;
+    height: 60px;
+}
+
+.chatroom.open {
+    height: 80vh;
 }
 
 .chatroom h3 {
-    background-color: #2C3951;
+    background-color: #574AE2;
     color: #FFFFFF;
     margin: 0;
-    height: 40px;
+    height: 60px;
     font-weight: 600;
-    font-size: 18px;
+    font-size: 1.5rem;
     text-transform: uppercase;
-    letter-spacing: .1em;
+    letter-spacing: .05em;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -43,24 +46,21 @@
     box-sizing: border-box;
     padding: 10px;
     margin: 0;
-    height: calc(100% - 80px); /* 100% - (.chatroom .input height + .chatroom h3 height) */
+    height: calc(100% - 120px); /* 100% - (.chatroom .input height + .chatroom h3 height) */
     overflow-y: scroll;
     background-color: white;
-    border: 1px solid #574AE2;
-    border-top: 7px solid #574AE2;
-    border-bottom: 7px solid #574AE2;
     -webkit-overflow-scrolling: touch;
 }
 
 .chatroom .chats .chat {
     position: relative;
-    padding: 5px 15px;
-    border-radius: 20px;
-    list-style: none;
     float: left;
     clear: both;
-    margin: 10px 0 0 0;
     max-width: 90%;
+    border-radius: 20px;
+    list-style: none;
+    padding: 5px 15px;
+    margin: 10px 0 0 0;
 }
 
 .chatroom .chats .chat img {
@@ -75,14 +75,14 @@
     clear: both;
     border-top-left-radius: 0;
     color: #574AE2;
-    background-color: #ECEFF7;
+    background-color: #F4F7F9;
 }
 
 .chatroom .chats .chat.right {
     float: right;
     clear: both;
     border-top-right-radius: 0;
-    color: #ECEFF7;
+    color: #F4F7F9;
     background-color: #574AE2;
 }
 
@@ -111,8 +111,6 @@
 }
 
 .chatroom .chats .chat.waiting { /* Loading dots */
-    color: #574AE2;
-    font-size: 1.5em;
     padding: 0;
     margin: 0 10px;
     background: transparent;
@@ -128,7 +126,8 @@
 }
 
 .chatroom .chats .chat.waiting span {
-    font-size: 1.5em;
+    color: #574AE2;
+    font-size: 2rem;
     animation-name: fade;
     animation-duration: 0.6s;
     animation-iteration-count: infinite;
@@ -203,24 +202,23 @@
 }
 
 .chatroom .input {
-    height: 40px;
-    width: 100%;
-    margin: 0;
-    padding: 0 5px;
-    background-color: #FFFFFF;
     display: flex;
+    height: 60px;
+    width: 100%;
+    background-color: #F4F7F9;
     flex-direction: row;
     align-items: center;
-    border: 1px solid #574AE2;
+    /*border: 1px solid #574AE2;*/
 }
 
 .chatroom .input input[type="text"] {
-    outline: 0;
-    color: #2C3951;
-    padding: 0 5px;
-    height: 100%;
     flex: 5;
+    color: #2C3951;
+    padding: 0 10px;
+    height: 100%;
+    background-color: transparent;
     box-sizing: border-box;
+    outline: none;
     border: none;
 }
 
@@ -236,7 +234,7 @@
     line-height: 1;
     text-align: center;
     padding: 0;
-    margin-right: 10px;
+    margin-right: 20px;
     cursor: pointer;
     white-space: nowrap;
     overflow: hidden;
