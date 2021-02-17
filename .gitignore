@@ -5,4 +5,12 @@ __pycache__/
 # Files in folders
 
 # Files
+.cache
 .DS_store
+.vscode
+yarn-error.log
+
+#
+dist
+node_modules
+
