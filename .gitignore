@@ -1,0 +1,8 @@
+# Folders
+.old/
+__pycache__/
+
+# Files in folders
+
+# Files
+.DS_store
