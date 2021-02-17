@@ -17604,20 +17604,20 @@ parcelRequire = (function (e, r, t, n) {
                 "use strict";
                 Object.defineProperty(exports, "__esModule", { value: !0 }), (exports.default = e);
                 var o = {
-                    lessThanXSeconds: { one: "less than a second", other: "less than {{count}} seconds" },
-                    xSeconds: { one: "1 second", other: "{{count}} seconds" },
-                    halfAMinute: "half a minute",
-                    lessThanXMinutes: { one: "less than a minute", other: "less than {{count}} minutes" },
-                    xMinutes: { one: "1 minute", other: "{{count}} minutes" },
-                    aboutXHours: { one: "about 1 hour", other: "about {{count}} hours" },
-                    xHours: { one: "1 hour", other: "{{count}} hours" },
-                    xDays: { one: "1 day", other: "{{count}} days" },
-                    aboutXMonths: { one: "about 1 month", other: "about {{count}} months" },
-                    xMonths: { one: "1 month", other: "{{count}} months" },
-                    aboutXYears: { one: "about 1 year", other: "about {{count}} years" },
-                    xYears: { one: "1 year", other: "{{count}} years" },
-                    overXYears: { one: "over 1 year", other: "over {{count}} years" },
-                    almostXYears: { one: "almost 1 year", other: "almost {{count}} years" },
+                    lessThanXSeconds: { one: "less than a second ago", other: "less than {{count}} seconds ago" },
+                    xSeconds:         { one: "1 second ago",           other: "{{count}} seconds ago" },
+                    halfAMinute:      "half a minute ago",
+                    lessThanXMinutes: { one: "less than a minute ago", other: "less than {{count}} minutes ago" },
+                    xMinutes:         { one: "1 minute ago",           other: "{{count}} minutes ago" },
+                    aboutXHours:      { one: "about 1 hour ago",       other: "about {{count}} hours ago" },
+                    xHours:           { one: "1 hour ago",             other: "{{count}} hours ago" },
+                    xDays:            { one: "1 day ago",              other: "{{count}} days ago" },
+                    aboutXMonths:     { one: "about 1 month ago",      other: "about {{count}} months ago" },
+                    xMonths:          { one: "1 month ago",            other: "{{count}} months ago" },
+                    aboutXYears:      { one: "about 1 year ago",       other: "about {{count}} years ago" },
+                    xYears:           { one: "1 year ago",             other: "{{count}} years ago" },
+                    overXYears:       { one: "over 1 year ago",        other: "over {{count}} years ago" },
+                    almostXYears:     { one: "almost 1 year ago",      other: "almost {{count}} years ago" },
                 };
                 function e(e, t, n) {
                     var s;
@@ -47855,8 +47855,13 @@ parcelRequire = (function (e, r, t, n) {
                 }
                 var v = 1e4,
                     w = 6e4,
-                    k = function () {
-                        return e.default.createElement("li", { className: "chat waiting" }, e.default.createElement("span", null, "â—"), " ", e.default.createElement("span", null, "â—"), " ", e.default.createElement("span", null, "â—"));
+                    k = function () { // Loading dots
+                        return e.default.createElement(
+                            "li", { className: "chat waiting" },
+                            e.default.createElement("span", null, "•"), " ",
+                            e.default.createElement("span", null, "•"), " ",
+                            e.default.createElement("span", null, "•") // ⬤ ⚈ • â—
+                        );
                     },
                     R = function (r) {
                         var s = r.messages,
@@ -48047,7 +48052,7 @@ parcelRequire = (function (e, r, t, n) {
                                             e.default.createElement(
                                                 "form",
                                                 { className: "input", onSubmit: this.handleSubmitMessage },
-                                                e.default.createElement("input", {
+                                                e.default.createElement("input", { // User input textfield/textarea
                                                     type: "text",
                                                     value: this.state.inputValue,
                                                     onChange: function (e) {
@@ -48055,7 +48060,7 @@ parcelRequire = (function (e, r, t, n) {
                                                     },
                                                     ref: this.inputRef,
                                                 }),
-                                                e.default.createElement("input", { type: "submit", value: "Submit" }),
+                                                e.default.createElement("input", { type: "submit", value: "➤" }), // Submit button
                                                 null != this.props.speechRecognition
                                                     ? e.default.createElement(n.default, {
                                                           language: this.props.speechRecognition,

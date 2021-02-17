@@ -37,8 +37,6 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    /*padding-top: 2px;
-    border-bottom: 7px solid #2259a9;*/
 }
 
 .chatroom .chats {
@@ -56,23 +54,26 @@
 
 .chatroom .chats .chat {
     position: relative;
-    padding: 5px 13px;
-    font-size: 14px;
-    border-radius: 10px;
+    padding: 5px 15px;
+    border-radius: 20px;
     list-style: none;
     float: left;
     clear: both;
-    margin: 10px 0 0;
+    margin: 10px 0 0 0;
     max-width: 90%;
 }
 
 .chatroom .chats .chat img {
+    border-radius: 20px;
+    border-top-left-radius: 0;
     max-width: 100%;
     vertical-align: middle;
 }
 
 .chatroom .chats .chat.left {
-    border-bottom-left-radius: 0;
+    float: left;
+    clear: both;
+    border-top-left-radius: 0;
     color: #574AE2;
     background-color: #ECEFF7;
 }
@@ -80,8 +81,8 @@
 .chatroom .chats .chat.right {
     float: right;
     clear: both;
-    border-bottom-right-radius: 0;
-    color: #FFFFFF;
+    border-top-right-radius: 0;
+    color: #ECEFF7;
     background-color: #574AE2;
 }
 
@@ -90,12 +91,12 @@
 }
 
 .chatroom .chats .chat.chat-img {
-    padding: 5px;
+    padding: 0;
 }
 
 .chatroom .chats .chat a {
     text-decoration: none;
-    color: #3498db;
+    color: #3498DB;
 }
 
 .chatroom .chats .chat ol,
@@ -109,56 +110,62 @@
     padding-left: 0;
 }
 
-.chatroom .chats .chat.waiting {
-    margin: 10px 0;
-    background: transparent;
+.chatroom .chats .chat.waiting { /* Loading dots */
+    color: #574AE2;
+    font-size: 1.5em;
     padding: 0;
+    margin: 0 10px;
+    background: transparent;
 }
 
 @keyframes fade {
     0% {
         opacity: 1;
     }
-    to {
-        opacity: 0.3;
+    100% {
+        opacity: 0.25;
     }
 }
 
 .chatroom .chats .chat.waiting span {
     font-size: 1.5em;
     animation-name: fade;
-    animation-duration: 0.8s;
+    animation-duration: 0.6s;
     animation-iteration-count: infinite;
     animation-direction: alternate;
-    animation-timing-function: ease-in-out;
+    animation-timing-function: ease-in-out; transform: rotate(60deg);
 }
 
 .chatroom .chats .chat.waiting span:first-child {
     animation-delay: 0s;
 }
+
 .chatroom .chats .chat.waiting span:nth-child(2) {
-    animation-delay: 0.4s;
+    animation-delay: 0.3s;
 }
 
 .chatroom .chats .chat.waiting span:nth-child(3) {
-    animation-delay: 0.8s;
+    animation-delay: 0.6s;
 }
 
 .chatroom .chats .time {
     list-style: none;
     clear: both;
     height: 10px;
+    font-style: italic;
     font-size: 10px;
-    color: #414141;
-    margin: 5px 0 20px;
+    color: #9C9FA7;
+    margin: 0px;
 }
 
 .chatroom .chats .time.left {
     float: left;
+    margin-left: 15px;
 }
 
 .chatroom .chats .time.right {
     float: right;
+    margin-right: 15px;
 }
 
 .chatroom .chats .chat-buttons {
@@ -219,17 +226,17 @@
 
 .chatroom .input input[type="submit"] {
     display: inline-block;
-    background: #2C3951;
-    color: #FFFFFF;
+    /*flex: 1;*/
+    background: transparent;
+    color: #574AE2;
     height: 30px;
-    min-width: 60px;
-    line-height: 1;
+    width: 30px;
+    font-size: 30px;
     font-weight: 600;
-    font-size: 12px;
-    text-transform: uppercase;
+    line-height: 1;
     text-align: center;
     padding: 0;
-    flex: 1;
+    margin-right: 10px;
     cursor: pointer;
     white-space: nowrap;
     overflow: hidden;
@@ -241,10 +248,11 @@
 }
 
 .chatroom .input input[type="submit"]:hover {
-    background: #574AE2;
+    opacity: 0.9;
+    transform: scale(1.05);
 }
 
-.chatroom #speech-input {
+.chatroom #speech-input { /* Voice input not used */
     height: 30px;
     width: 30px;
     margin-left: 5px;
@@ -256,10 +264,10 @@
     transition: all 0.3s ease;
 }
 
-.chatroom #speech-input:hover {
+.chatroom #speech-input:hover { /* Voice input not used */
     background: hsla(0, 0%, 100%, 0.8);
 }
 
 .chatroom .vertical-center {
     vertical-align: middle;
-}s
+}

@@ -3,6 +3,7 @@
 
 <html lang="en">
     <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <link rel="stylesheet" href="assets/css/chatroom.css"/>
         <!--<link rel="stylesheet" href="https://npm-scalableminds.s3.eu-central-1.amazonaws.com/@scalableminds/chatroom@master/dist/Chatroom.css"/>-->
         <link rel="stylesheet" href="assets/css/main.css"/>
@@ -10,9 +11,10 @@
 
     <body>
         <h1>Chatbot WebApp</h1>
+
         <div class="chat-container">
-            <!--<script src="assets/js/chatroom.js"/></script>-->
-            <script src="https://npm-scalableminds.s3.eu-central-1.amazonaws.com/@scalableminds/chatroom@master/dist/Chatroom.js"/></script>
+            <script src="assets/js/chatroom.js"/></script>
+            <!--<script src="https://npm-scalableminds.s3.eu-central-1.amazonaws.com/@scalableminds/chatroom@master/dist/Chatroom.js"/></script>-->
             <script type="text/javascript">
                 var chatroom = new window.Chatroom({
                     host: "http://localhost:5005",
@@ -26,6 +28,8 @@
             </script>
         </div>
         
+        <p>rasa run actions --cors "*"</p>
+        <p>rasa run --enable-api --cors "*" --debug</p>
         
     </body>
 </html>
