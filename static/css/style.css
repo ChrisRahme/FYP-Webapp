@@ -1,10 +1,11 @@
-/* ============= css related to chats =============== */
+/* =============== Chats =============== */
 
 .chat_widget {
   display: none;
-  width: 400px;
+  width: 25vw;
   height: 80vh;
   min-height: 300px;
+  min-width: 400px;
   right: 15px;
   bottom: 15px;
   position: fixed;
@@ -78,12 +79,12 @@ textarea-webkit-scrollbar {
 .userAvatar {
   float: right;
   margin-right: 5px;
-  /*animation: animateElement linear 0.3s;
-  animation-iteration-count: 1;*/
+  animation: animateElement linear 0.2s;
+  animation-iteration-count: 1;
 }
 
 
-.botMsg, .userMsg {
+.botMsg, .userMsg, .botTyping {
   padding: 10px;
   margin: 5px;
   word-wrap: break-word;
@@ -92,17 +93,17 @@ textarea-webkit-scrollbar {
   min-width: 5%;
 }
 
-.botMsg {
+.botMsg, .botTyping {
   float: left;
   background: #e3e7ee;
-  color: black;
+  color: #000000;
   margin-left: 0.5em;
   border-radius: 5px 20px 20px 20px;
 }
 
 .userMsg {
   float: right;
-  background: #060dcfc7;
+  background: #060DCF;
   color: white;
   margin-right: 0.5em;
   border-radius: 20px 5px 20px 20px;
@@ -120,7 +121,6 @@ textarea-webkit-scrollbar {
 }
 
 .keypad {
-  /* display: none;  */
   background: white;
   height: 50px;
   position: absolute;
@@ -138,7 +138,7 @@ textarea-webkit-scrollbar {
   text-align: center;
   font-size: 25px;
   cursor: pointer;
-  color: #060dcfc7;
+  color: #060DCF;
   transform: translate(0, 25%);
 }
 
@@ -157,7 +157,7 @@ textarea-webkit-scrollbar {
   cursor: pointer;
 }
 
-/* css for dropdown menu of the bot */
+/* Dropdown menu */
 
 #close, #restart, #clear {
   cursor: pointer;
@@ -173,7 +173,7 @@ textarea-webkit-scrollbar {
 
 .dropdown-content li > a,
 .dropdown-content li > span {
-  color: #060dcfc7;
+  color: #060DCF;
 }
 
 @keyframes animateElement {
@@ -186,9 +186,9 @@ textarea-webkit-scrollbar {
   }
 }
 
-/*========== css related to chats elements============= */
+/* ============= Chats elements ============= */
 
-/* css for card details of carousel cards */
+/* Card details of carousel cards */
 
 .content {
   transition: 0.2s;
@@ -274,7 +274,7 @@ textarea-webkit-scrollbar {
 }
 
 .order, #closeContents {
-  color: #060dcfc7;
+  color: #060DCF;
 }
 
 .metadata_2, .metadata_3, .metadata_4, .metadata_5, .metadata_6 {
@@ -328,14 +328,14 @@ div.content_data::-webkit-scrollbar {
     / optional: just make scrollbar invisible */
 }
 
-/* css for single card */
+/* Single card */
 
 .singleCard {
   padding-left: calc(12px + 1.5em);
   padding-right: calc(12px + 1.5em);
 }
 
-/* css for image card */
+/* Image card */
 
 .imgcard {
   object-fit: cover;
@@ -345,7 +345,7 @@ div.content_data::-webkit-scrollbar {
   margin-left: 1%;
 }
 
-/* css for suggestions buttons */
+/* Suggestions buttons */
 
 .suggestions {
   padding: 5px;
@@ -366,7 +366,7 @@ div.content_data::-webkit-scrollbar {
 
 .menuChips {
   display: block;
-  background: #060dcfc7;
+  background: #060DCF;
   color: #fff;
   text-align: center;
   padding: 5px;
@@ -381,7 +381,7 @@ div.content_data::-webkit-scrollbar {
   margin-bottom: 0;
 }
 
-/* cards carousels */
+/* Cards carousels */
 
 .cards {
   display: none;
@@ -407,7 +407,6 @@ div.content_data::-webkit-scrollbar {
 
 .cards div.note {
   position: absolute;
-  /* vertically align center */
   top: 50%;
   transform: translateY(-50%);
   left: 0;
@@ -470,8 +469,7 @@ div.content_data::-webkit-scrollbar {
     -moz-transform: translatex(-10px);
     -o-transform: translatex(-10px);
     transform: translatex(-10px);
-  }
-  to {
+  } to {
     opacity: 1;
     -webkit-transform: translatex(0);
     -moz-transform: translatex(0);
@@ -489,17 +487,17 @@ div.content_data::-webkit-scrollbar {
   -moz-animation-fill-mode: both;
   -o-animation-fill-mode: both;
   animation-fill-mode: both;
-  -webkit-animation-duration: 0.8s;
-  -moz-animation-duration: 0.8s;
-  -o-animation-duration: 0.8s;
-  animation-duration: 0.8s;
-  -webkit-animation-delay: 0.8s;
-  -moz-animation-delay: 0.8s;
-  -o-animation-duration: 0.8s;
-  animation-delay: 0.8s;
+  -webkit-animation-duration: 0.2s;
+  -moz-animation-duration: 0.2s;
+  -o-animation-duration: 0.2s;
+  animation-duration: 0.2s;
+  -webkit-animation-delay: 0.2s;
+  -moz-animation-delay: 0.2s;
+  -o-animation-duration: 0.2s;
+  animation-delay: 0.2s;
 }
 
-/* css for cards within the cards carousels */
+/* Cards within the cards carousels */
 
 .cardBackgroundImage {
   width: 100%;
@@ -531,10 +529,8 @@ div.content_data::-webkit-scrollbar {
   display: inline-block;
   margin-bottom: 1px;
   font-size: 15px;
-  /* font-weight: 600; */
   padding: 5px;
-  /* color:#060dcfc7; */
-  color: #ffffff;
+  color: #FFFFFF;
   cursor: pointer;
 }
 
@@ -545,7 +541,7 @@ div.content_data::-webkit-scrollbar {
   line-height: 15px;
 }
 
-/*css for dropDown messages*/
+/* Dropdown messages*/
 
 .dropDownMsg {
   float: left;
@@ -566,7 +562,7 @@ div.content_data::-webkit-scrollbar {
   border: 0px solid #f2f2f2;
 }
 
-/* css for quick replies */
+/* Quick replies */
 
 .quickReplies {
   padding: 5px;
@@ -595,18 +591,18 @@ div.content_data::-webkit-scrollbar {
 
 .chip {
   background-color: white;
-  border: 1px solid#060dcfc7;
-  color: #060dcfc7;
+  border: 1px solid#060DCF;
+  color: #060DCF;
   font-weight: bolder;
   text-align: center;
 }
 
 .chip:hover {
-  background-color: #060dcfc7;
+  background-color: #060DCF;
   color: white;
 }
 
-/* css for charts */
+/* Charts */
 
 #expand:hover {
   font-size: 18px;
@@ -635,7 +631,7 @@ div.content_data::-webkit-scrollbar {
   margin-top: 5px;
 }
 
-/* css for collapsible */
+/* Collapsible */
 
 .collapsible {
   margin-top: 5px;
@@ -654,7 +650,7 @@ div.content_data::-webkit-scrollbar {
 
 .collapsible-header {
   font-weight: bold;
-  color: #060dcfc7;
+  color: #060DCF;
 }
 
 ul.collapsible > li:first-child .collapsible-header {
@@ -662,7 +658,7 @@ ul.collapsible > li:first-child .collapsible-header {
 }
 
 ul.collapsible > li:last-child .collapsible-header {
-  color: #060dcfc7;
+  color: #060DCF;
   border-radius: 0px 0px 20px 20px;
 }
 
@@ -674,27 +670,16 @@ ul.collapsible > li:last-child .collapsible-body {
   padding: 10px;
 }
 
-/* css for botTyping */
+/* Bot typing */
 
-.botTyping {
-  float: left;
-  margin-top: 5px;
-  background: #e3e7ee;
-  color: #000000;
-  /* box-shadow: 2px 3px 9px 0px #9a82847a; */
-  margin-left: 0.5em;
-  padding: 15px;
-  border-radius: 5px 20px 20px 20px;
-  max-width: 60%;
-  min-width: 20%;
-  word-wrap: break-word;
-  border-radius: 5px 20px 20px 20px;
+.botTyping { /* Same as .botMsg above */
+  color: #000000
 }
 
 .botTyping > div {
   width: 10px;
   height: 10px;
-  background-color: #060dcfc7;
+  background-color: #060dcf;
   border-radius: 100%;
   display: inline-block;
   -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
@@ -736,17 +721,11 @@ ul.collapsible > li:last-child .collapsible-body {
   }
 }
 
-input:focus {
+input:focus, video:focus {
   outline: none;
 }
 
-video:focus {
-  outline: none;
-}
-
-.video-container iframe,
-.video-container object,
-.video-container embed {
+.video-container iframe, .video-container object, .video-container embed {
   position: absolute;
   top: 0;
   left: 0;
@@ -760,8 +739,8 @@ video:focus {
 /* Bot pop-up intro */
 
 .tap-target {
-  color: #fff;
-  background: #060dcfc7;
+  color: #FFFFFF;
+  background: #060DCF;
 }
 
 .pdf_attachment {
@@ -778,7 +757,7 @@ video:focus {
   height: 100%;
   font-size: 25px;
   padding: 7% !important;
-  background-color: #060dcfc7;
+  background-color: #060DCF;
   color: white;
 }
 
@@ -790,5 +769,5 @@ video:focus {
 }
 
 .pdf_link a {
-  color: #060dcfc7;
+  color: #060DCF;
 }
