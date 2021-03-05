@@ -20,7 +20,7 @@
                     host: "http://localhost:5005",
                     title: "Rasa Assistant",
                     container: document.querySelector(".chat-container"),
-                    welcomeMessage: "Hi! How may I help you?",
+                    welcomeMessage: "Hi, I’m GDS automated virtual assistant. How can I help you today?",
                     //speechRecognition: "en-US",
                     //voiceLang: "en-US"
                 });

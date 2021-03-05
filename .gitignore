@@ -13,4 +13,7 @@ yarn-error.log
 #
 dist
 node_modules
-
+package.json
+package-lock.json
+.eslintrc.json
+.prettierrc
