@@ -61,7 +61,7 @@ function hideBotTyping() {
  */
 function showBotTyping() {
   const botTyping =
-    '<img class="botAvatar" id="botAvatar" src="./static/img/sara_avatar.png"/><div class="botTyping"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div>';
+    '<img class="botAvatar" id="botAvatar" src="./static/img/botAvatar_rasa.png"/><div class="botTyping"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div>';
   $(botTyping).appendTo(".chats");
   $(".botTyping").show();
   scrollToBottomOfResults();
@@ -488,7 +488,7 @@ function setBotResponse(response) {
     if (response.length < 1) {
       // if there is no response from Rasa, send this message to the user
       const fallbackMsg = "I am facing some issues, please try again later.";
-      const BotResponse = `<img class="botAvatar" src="./static/img/sara_avatar.png"/><p class="botMsg">${fallbackMsg}</p><div class="clearfix"></div>`;
+      const BotResponse = `<img class="botAvatar" src="./static/img/botAvatar_rasa.png"/><p class="botMsg">${fallbackMsg}</p><div class="clearfix"></div>`;
 
       $(BotResponse).appendTo(".chats").hide().fadeIn(1000);
       scrollToBottomOfResults();
@@ -499,7 +499,7 @@ function setBotResponse(response) {
         if (Object.hasOwnProperty.call(response[i], "text")) {
           if (response[i].text != null) {
             var formatted_text = response[i].text.replace(/(?:\r\n|\r|\n)/g, '<br>')
-            const BotResponse = `<img class="botAvatar" src="./static/img/sara_avatar.png"/><p class="botMsg">${formatted_text}</p><div class="clearfix"></div>`;
+            const BotResponse = `<img class="botAvatar" src="./static/img/botAvatar_rasa.png"/><p class="botMsg">${formatted_text}</p><div class="clearfix"></div>`;
             $(BotResponse).appendTo(".chats").hide().fadeIn(1000);
           }
         }
