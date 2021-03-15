@@ -57,11 +57,7 @@ div.chats::-webkit-scrollbar {
   overflow: hidden;
 }
 
-/*textarea::-webkit-input-placeholder {
-  font-family: Lato;
-}*/
-
-textarea-webkit-scrollbar {
+.chat_widget textarea-webkit-scrollbar {
   width: 0 !important;
 }
 
