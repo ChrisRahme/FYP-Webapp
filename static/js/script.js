@@ -5,9 +5,17 @@
 /* eslint-disable no-console */
 /* eslint-disable camelcase */
 
+const server = "localhost"
+const rasa_action_endpoint_url = `http://${server}:5055/webhook`
+const rasa_server_url = `http://${server}:5005/webhooks/rest/webhook`;
+
+const botPic  = "./static/img/botAvatar_rasa.png";
+const userPic = "./static/img/userAvatar.jpg"
+
 const action_name = "action_utter_greet";
-const rasa_server_url = "http://localhost:5005/webhooks/rest/webhook";
 const sender_id = uuidv4();
+
+
 
 // Bot pop-up intro
 document.addEventListener("DOMContentLoaded", () => {
@@ -20,28 +28,32 @@ document.addEventListener("DOMContentLoaded", () => {
   }, 4000);
 });
 
-// initialization
+
+
+// Initialization
 $(document).ready(() => {
   // Bot pop-up intro
   $("div").removeClass("tap-target-origin");
 
-  // drop down menu for close, restart conversation & clear the chats.
+  // Dropdown menu
   $(".dropdown-trigger").dropdown();
 
-  // initiate the modal for displaying the charts,
-  // if you dont have charts, then you comment the below line
+  // Initiate the modal for displaying charts
   $(".modal").modal();
 
-  // enable this if u have configured the bot to start the conversation.
-  // showBotTyping();
-  // $("#userInput").prop('disabled', true);
+  // TODO Check this
+  // If the bot to starts the conversation 
+  //showBotTyping();
+  //$("#userInput").prop('disabled', true);
 
-  // if you want the bot to start the conversation
+  // If you want the bot to start the conversation
   customActionTrigger();
 });
 
+
+
 /**
- * scroll to the bottom of the chats after new message has been added to chat
+ * Scrolls to the bottom of the conversation after new message
  */
 function scrollToBottomOfResults() {
   const terminalResultsDiv = document.getElementById("chats");
@@ -49,7 +61,7 @@ function scrollToBottomOfResults() {
 }
 
 /**
- * removes the bot typing indicator from the chat screen
+ * Removes the bot typing indicator from the chat screen
  */
 function hideBotTyping() {
   $("#botAvatar").remove();
@@ -57,22 +69,30 @@ function hideBotTyping() {
 }
 
 /**
- * adds the bot typing indicator from the chat screen
+ * Adds the bot typing indicator to the chat screen
  */
 function showBotTyping() {
-  const botTyping =
-    '<img class="botAvatar" id="botAvatar" src="./static/img/botAvatar_rasa.png"/><div class="botTyping"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div>';
+  const botTyping = `
+    <img class="botAvatar" id="botAvatar" src="${botPic}"/>
+    <div class="botTyping">
+      <div class="bounce1"></div>
+      <div class="bounce2"></div>
+      <div class="bounce3"></div>
+    </div>`;
   $(botTyping).appendTo(".chats");
   $(".botTyping").show();
   scrollToBottomOfResults();
 }
 
 /**
- * Set user response on the chat screen
+ * Sets user response on the chat screen
  * @param {String} message user message
  */
 function setUserResponse(message) {
-  const user_response = `<img class="userAvatar" src='./static/img/userAvatar.jpg'><p class="userMsg">${message} </p><div class="clearfix"></div>`;
+  const user_response =  `
+    <img class="userAvatar" src="${userPic}">
+    <p class="userMsg">${message}</p>
+    <div class="clearfix"></div>`;
   $(user_response).appendTo(".chats").show("slow");
 
   $(".usrInput").val("");
@@ -82,30 +102,24 @@ function setUserResponse(message) {
 }
 
 /**
- *  adds vertically stacked buttons as a bot response
+ * Adds vertically stacked buttons as a bot response
  * @param {Array} suggestions buttons json array
  */
 function addSuggestion(suggestions) {
   setTimeout(() => {
     const suggLength = suggestions.length;
-    $(
-      ' <div class="singleCard"> <div class="suggestions"><div class="menu"></div></div></diV>'
-    )
-      .appendTo(".chats")
-      .hide()
-      .fadeIn(1000);
+    $('<div class="singleCard"><div class="suggestions"><div class="menu"></div></div></div>').appendTo(".chats").hide().fadeIn(1000);
+    
     // Loop through suggestions
     for (let i = 0; i < suggLength; i += 1) {
-      $(
-        `<div class="menuChips" data-payload='${suggestions[i].payload}'>${suggestions[i].title}</div>`
-      ).appendTo(".menu");
+      $(`<div class="menuChips" data-payload='${suggestions[i].payload}'>${suggestions[i].title}</div>`).appendTo(".menu");
     }
     scrollToBottomOfResults();
   }, 1000);
 }
 
 /**
- * creates horizontally placed cards carousel
+ * Creates horizontally placed cards carousel
  * @param {Array} cardsData json array
  */
 function createCardsCarousel(cardsData) {
@@ -113,21 +127,35 @@ function createCardsCarousel(cardsData) {
   for (let i = 0; i < cardsData.length; i += 1) {
     const title = cardsData[i].name;
     const ratings = `${Math.round((cardsData[i].ratings / 5) * 100)}%`;
-    const item = `<div class="carousel_cards in-left">
-    <img class="cardBackgroundImage" src="${cardsData[i].image}">
-    <div class="cardFooter"> <span class="cardTitle" title="${title}">${title}</span>
-    <div class="cardDescription"><div class="stars-outer">
-    <div class="stars-inner" style="width:${ratings}" >
-    </div></div></div></div></div>`;
+    const item = `
+      <div class="carousel_cards in-left">
+        <img class="cardBackgroundImage" src="${cardsData[i].image}">
+        <div class="cardFooter">
+          <span class="cardTitle" title="${title}">${title}</span>
+          <div class="cardDescription">
+            <div class="stars-outer">
+              <div class="stars-inner" style="width:${ratings}">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>`;
 
     cards += item;
   }
-  const cardContents = `<div id="paginated_cards" class="cards"> <div class="cards_scroller">${cards} <span class="arrow prev fa fa-chevron-circle-left "></span> <span class="arrow next fa fa-chevron-circle-right" ></span> </div> </div>`;
+  const cardContents = `
+    <div id="paginated_cards" class="cards">
+      <div class="cards_scroller">
+        ${cards}
+        <span class="arrow prev fa fa-chevron-circle-left "></span>
+        <span class="arrow next fa fa-chevron-circle-right" ></span>
+      </div>
+    </div>`;
   return cardContents;
 }
 
 /**
- * appends cards carousel on to the chat screen
+ * Appends cards carousel on to the chat screen
  * @param {Array} cardsToAdd json array
  */
 function showCardsCarousel(cardsToAdd) {
@@ -136,10 +164,10 @@ function showCardsCarousel(cardsToAdd) {
   $(cards).appendTo(".chats").show();
 
   if (cardsToAdd.length <= 2) {
-    $(`.cards_scroller>div.carousel_cards:nth-of-type(${i})`).fadeIn(3000);
+    $(`.cards_scroller 0 > div.carousel_cards:nth-of-type(${i})`).fadeIn(3000);
   } else {
     for (let i = 0; i < cardsToAdd.length; i += 1) {
-      $(`.cards_scroller>div.carousel_cards:nth-of-type(${i})`).fadeIn(3000);
+      $(`.cards_scroller > div.carousel_cards:nth-of-type(${i})`).fadeIn(3000);
     }
     $(".cards .arrow.prev").fadeIn("3000");
     $(".cards .arrow.next").fadeIn("3000");
@@ -153,7 +181,7 @@ function showCardsCarousel(cardsToAdd) {
 
   /**
    * For paginated scrolling, simply scroll the card one item in the given
-   * direction and let css scroll snaping handle the specific alignment.
+   * direction and let CSS scroll snaping handle the specific alignment.
    */
   function scrollToNextPage() {
     card_scroller.scrollBy(card_item_size, 0);
@@ -168,20 +196,23 @@ function showCardsCarousel(cardsToAdd) {
 }
 
 /**
- * appends horizontally placed buttons carousel
- * on to the chat screen
+ * Appends horizontally placed buttons carousel to the chat screen
  * @param {Array} quickRepliesData json array
  */
 function showQuickReplies(quickRepliesData) {
   let chips = "";
   for (let i = 0; i < quickRepliesData.length; i += 1) {
-    const chip = `<div class="chip" data-payload='${quickRepliesData[i].payload}'>${quickRepliesData[i].title}</div>`;
+    const chip = `
+      <div class="chip" data-payload='${quickRepliesData[i].payload}'>
+        ${quickRepliesData[i].title}
+      </div>`;
     chips += chip;
   }
 
   const quickReplies = `<div class="quickReplies">${chips}</div><div class="clearfix"></div>`;
   $(quickReplies).appendTo(".chats").fadeIn(1000);
   scrollToBottomOfResults();
+
   const slider = document.querySelector(".quickReplies");
   let isDown = false;
   let startX;
@@ -211,34 +242,52 @@ function showQuickReplies(quickRepliesData) {
 }
 
 /**
- * renders pdf attachment on to the chat screen
+ * Renders PDF attachment on the chat screen
  * @param {Object} pdf_data json object
  */
 function renderPdfAttachment(pdf_data) {
-  const { url: pdf_url } = pdf_data.custom;
-  const { title: pdf_title } = pdf_data.custom;
-  const pdf_attachment = `<div class="pdf_attachment"><div class="row"><div class="col s3 pdf_icon">
-<i class="fa fa-file-pdf-o" aria-hidden="true"></i></div><div class="col s9 pdf_link"><a href="${pdf_url}" target="_blank">
-${pdf_title} </a></div></div></div>`;
+  const {url: pdf_url} = pdf_data.custom;
+  const {title: pdf_title} = pdf_data.custom;
+  const pdf_attachment = `
+    <div class="pdf_attachment">
+      <div class="row">
+        <div class="col s3 pdf_icon">
+          <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+        </div>
+        <div class="col s9 pdf_link">
+          <a href="${pdf_url}" target="_blank">${pdf_title}</a>
+        </div>
+      </div>
+    </div>`;
 
   $(".chats").append(pdf_attachment);
   scrollToBottomOfResults();
 }
 
 /**
- *  renders the dropdown message and
- *  handles the user selection
+ * Renders the dropdown message and handles the user selection
  * @param {Array} drop_down_data json array
  */
 function renderDropDwon(drop_down_data) {
   let drop_down_options = "";
   for (let i = 0; i < drop_down_data.length; i += 1) {
-    drop_down_options += `<option value="${drop_down_data[i].value}">${drop_down_data[i].label}</option>`;
+    drop_down_options += `
+      <option value="${drop_down_data[i].value}">
+        ${drop_down_data[i].label}
+      </option>`;
   }
-  const drop_down_select = `<div class="dropDownMsg"><select class="browser-default dropDownSelect"> <option value="" disabled selected>Choose your option</option>${drop_down_options}</select></div>`;
+  const drop_down_select = `
+    <div class="dropDownMsg">
+      <select class="browser-default dropDownSelect">
+        <option value="" disabled selected>Choose your option</option>
+        ${drop_down_options}
+      </select>
+    </div>`;
+  
   $(".chats").append(drop_down_select);
   scrollToBottomOfResults();
-  // add event handler if user selects a option.
+
+  // Add event handler if user selects a option
   // eslint-disable-next-line func-names
   $("select").on("change", function () {
     let value = "";
@@ -256,11 +305,11 @@ function renderDropDwon(drop_down_data) {
 }
 
 /**
- *  sends the user location to rasa
+ * Sends the user location to Rasa
  * @param {Object} position json object
  */
 function getUserPosition(position) {
-  // here you to add the intent which you want to trigger
+  // Add the intent to trigger
   const response = `/inform{"latitude":${position.coords.latitude},"longitude":${position.coords.longitude}}`;
   $("#userInput").prop("disabled", false);
   // eslint-disable-next-line no-use-before-define
@@ -269,7 +318,7 @@ function getUserPosition(position) {
 }
 
 /**
- *  handles error while accessing the user's geolocation
+ * Handles error while accessing the user's geolocation
  * @param {Object} error json object
  */
 function handleLocationAccessError(error) {
@@ -299,7 +348,7 @@ function handleLocationAccessError(error) {
 }
 
 /**
- *  fetches the user location from the browser
+ * Fetches the user location from the browser
  */
 function getLocation() {
   if (navigator.geolocation) {
@@ -313,32 +362,36 @@ function getLocation() {
 }
 
 /**
- *  creates collapsible
- * for more info refer:https://materializecss.com/collapsible.html
+ * Creates collapsible (https://materializecss.com/collapsible.html)
  * @param {Array} collapsible_date json array
  */
 function createCollapsible(collapsible_data) {
-  // sample data format:
-  // var collapsible_data=[{"title":"abc","description":"xyz"},{"title":"pqr","description":"jkl"}]
+  // Sample data format:
+  // var collapsible_data = [{"title":"abc","description":"xyz"},{"title":"pqr","description":"jkl"}]
   let collapsible_list = "";
   for (let i = 0; i < collapsible_data.length; i += 1) {
-    const collapsible_item = `<li><div class="collapsible-header">${collapsible_data[i].title}</div><div class="collapsible-body">
-<span>${collapsible_data[i].description}</span></div></li>`;
+    const collapsible_item = `
+      <li>
+        <div class="collapsible-header">
+          ${collapsible_data[i].title}
+        </div>
+        <div class="collapsible-body">
+          <span>${collapsible_data[i].description}</span>
+        </div>
+      </li>`;
 
     collapsible_list += collapsible_item;
   }
   const collapsible_contents = `<ul class="collapsible">${collapsible_list}</ul>`;
   $(collapsible_contents).appendTo(".chats");
 
-  // initialize the collapsible
+  // Initialize the collapsible
   $(".collapsible").collapsible();
   scrollToBottomOfResults();
 }
 
 /**
- *  creates a div that will render the
- *  charts in canvas as required by charts.js
- * for more info. refer: https://www.chartjs.org/docs/latest/getting-started/usage.html
+ *  Creates a div that will render the charts in canvas as required by charts.js (https://chartjs.org/docs/latest/getting-started/usage.html)
  * @param {String} title chart title
  * @param {Array} labels chart label
  * @param {Array} backgroundColor chart's background color
@@ -346,23 +399,21 @@ function createCollapsible(collapsible_data) {
  * @param {String} chartType chart type
  * @param {String} displayLegend chart's legend
  */
-function createChart(
-  title,
-  labels,
-  backgroundColor,
-  chartsData,
-  chartType,
-  displayLegend
-) {
-  const html =
-    '<div class="chart-container"> <span class="modal-trigger" id="expand" title="expand" href="#modal1"><i class="fa fa-external-link" aria-hidden="true"></i></span> <canvas id="chat-chart" ></canvas> </div> <div class="clearfix"></div>';
+function createChart(title, labels, backgroundColor, chartsData, chartType, displayLegend) {
+  const html = `
+    <div class="chart-container">
+      <span class="modal-trigger" id="expand" title="expand" href="#modal1">
+        <i class="fa fa-external-link" aria-hidden="true"></i>
+      </span>
+      <canvas id="chat-chart" ></canvas>
+    </div>
+    <div class="clearfix"></div>`;
   $(html).appendTo(".chats");
 
-  // create the context that will draw the charts over the canvas in the ".chart-container" div
+  // Context that will draw the charts over the canvas in the ".chart-container" div
   const ctx = $("#chat-chart");
 
-  // Once you have the element or context, instantiate the chart-type by passing the configuration,
-  // for more info. refer: https://www.chartjs.org/docs/latest/configuration/
+  // Instantiate chart-type by passing the configuration (https://chartjs.org/docs/latest/configuration)
   const data = {
     labels,
     datasets: [
@@ -397,25 +448,16 @@ function createChart(
     },
   };
 
-  // draw the chart by passing the configuration
+  // Draw the chart by passing the configuration
   // eslint-disable-next-line no-undef
-  chatChart = new Chart(ctx, {
-    type: chartType,
-    data,
-    options,
-  });
+  chatChart = new Chart(ctx, {type: chartType, data, options});
 
   scrollToBottomOfResults();
 }
-// function to render the charts in the modal
 
 /**
- *  creates a modal that will render the
- *  charts in canvas as required by charts.js
- * for more info. refer: https://www.chartjs.org/docs/latest/getting-started/usage.html
- *
- * if you want to display the charts in modal,
- *  make sure you have configured the modal in `index.html`
+ * Creates a modal that will render the charts in canvas as required by charts.js (https://www.chartjs.org/docs/latest/getting-started/usage.html)
+ * If you want to display the charts in modal, make sure you have configured the modal in `index.html`
  * @param {String} title chart title
  * @param {Array} labels chart label
  * @param {Array} backgroundColor chart's background color
@@ -423,20 +465,11 @@ function createChart(
  * @param {String} chartType chart type
  * @param {String} displayLegend chart's legend
  */
-function createChartinModal(
-  title,
-  labels,
-  backgroundColor,
-  chartsData,
-  chartType,
-  displayLegend
-) {
-  // create the context that will draw the charts
-  // over the canvas in the `#modal-chart` div of the modal
+function createChartinModal(title, labels, backgroundColor, chartsData, chartType, displayLegend) {
+  // Context that will draw the charts over the canvas in the ".chart-container" div
   const ctx = $("#modal-chart");
 
-  // Once you have the element or context, instantiate the chart-type by passing the configuration,
-  // for more info. refer: https://www.chartjs.org/docs/latest/configuration/
+  // Instantiate chart-type by passing the configuration (https://chartjs.org/docs/latest/configuration)
   const data = {
     labels,
     datasets: [
@@ -468,153 +501,123 @@ function createChartinModal(
   };
 
   // eslint-disable-next-line no-undef
-  modalChart = new Chart(ctx, {
-    type: chartType,
-    data,
-    options,
-  });
+  modalChart = new Chart(ctx, {type: chartType, data, options});
 }
 
 /**
- * renders bot response on to the chat screen
+ * Renders bot response on to the chat screen (https://rasa.com/docs/rasa/connectors/your-own-website#request-and-response-format)
  * @param {Array} response json array containing different types of bot response
- *
- * for more info: `https://rasa.com/docs/rasa/connectors/your-own-website#request-and-response-format`
  */
 function setBotResponse(response) {
-  // renders bot response after 500 milliseconds
+  // Renders bot response after 500 milliseconds
   setTimeout(() => {
     hideBotTyping();
-    if (response.length < 1) {
-      // if there is no response from Rasa, send this message to the user
+    if (response.length < 1) { // There is no response from Rasa
       const fallbackMsg = "I am facing some issues, please try again later.";
-      const BotResponse = `<img class="botAvatar" src="./static/img/botAvatar_rasa.png"/><p class="botMsg">${fallbackMsg}</p><div class="clearfix"></div>`;
+      const BotResponse = `
+        <img class="botAvatar" src="${botPic}"/>
+        <p class="botMsg">${fallbackMsg}</p>
+        <div class="clearfix"></div>`;
 
       $(BotResponse).appendTo(".chats").hide().fadeIn(1000);
       scrollToBottomOfResults();
-    } else {
-      // if we get response from Rasa
+    } else { // Response received from Rasa
       for (let i = 0; i < response.length; i += 1) {
-        // check if the response contains "text"
-        if (Object.hasOwnProperty.call(response[i], "text")) {
+        if (Object.hasOwnProperty.call(response[i], "text")) { // Response contains "text"
           if (response[i].text != null) {
             var formatted_text = response[i].text.replace(/(?:\r\n|\r|\n)/g, '<br>')
-            const BotResponse = `<img class="botAvatar" src="./static/img/botAvatar_rasa.png"/><p class="botMsg">${formatted_text}</p><div class="clearfix"></div>`;
+            const BotResponse = `
+              <img class="botAvatar" src="${botPic}"/>
+              <p class="botMsg">${formatted_text}</p>
+              <div class="clearfix"></div>`;
             $(BotResponse).appendTo(".chats").hide().fadeIn(1000);
           }
         }
 
-        // check if the response contains "images"
-        if (Object.hasOwnProperty.call(response[i], "image")) {
+        if (Object.hasOwnProperty.call(response[i], "image")) { // Response contains "images"
           if (response[i].image !== null) {
-            const BotResponse = `<div class="singleCard"><img class="imgcard" src="${response[i].image}"></div><div class="clearfix">`;
-
+            const BotResponse = `
+              <div class="singleCard">
+                <img class="imgcard" src="${response[i].image}">
+              </div><div class="clearfix">`;
             $(BotResponse).appendTo(".chats").hide().fadeIn(1000);
           }
         }
 
-        // check if the response contains "buttons"
-        if (Object.hasOwnProperty.call(response[i], "buttons")) {
+        if (Object.hasOwnProperty.call(response[i], "buttons")) { // Response contains "buttons"
           if (response[i].buttons.length > 0) {
             addSuggestion(response[i].buttons);
           }
         }
 
-        // check if the response contains "attachment"
-        if (Object.hasOwnProperty.call(response[i], "attachment")) {
+        if (Object.hasOwnProperty.call(response[i], "attachment")) { // Response contains "attachment"
           if (response[i].attachment != null) {
-            if (response[i].attachment.type === "video") {
-              // check if the attachment type is "video"
-              const video_url = response[i].attachment.payload.src;
-
-              const BotResponse = `<div class="video-container"> <iframe src="${video_url}" frameborder="0" allowfullscreen></iframe> </div>`;
+            if (response[i].attachment.type === "video") { // Attachment type is "video"
+              const BotResponse = `
+                <div class="video-container">
+                  <iframe src="${response[i].attachment.payload.src}" frameborder="0" allowfullscreen></iframe>
+                </div>`;
               $(BotResponse).appendTo(".chats").hide().fadeIn(1000);
             }
           }
         }
-        // check if the response contains "custom" message
-        if (Object.hasOwnProperty.call(response[i], "custom")) {
+        
+        if (Object.hasOwnProperty.call(response[i], "custom")) { // Response contains "custom"
           const { payload } = response[i].custom;
-          if (payload === "quickReplies") {
-            // check if the custom payload type is "quickReplies"
+          if (payload === "quickReplies") { // Custom payload type is "quickReplies"
             const quickRepliesData = response[i].custom.data;
             showQuickReplies(quickRepliesData);
             return;
           }
 
-          // check if the custom payload type is "pdf_attachment"
-          if (payload === "pdf_attachment") {
+          if (payload === "pdf_attachment") { // Custom payload type is "pdf_attachment"
             renderPdfAttachment(response[i]);
             return;
           }
 
-          // check if the custom payload type is "dropDown"
-          if (payload === "dropDown") {
+          if (payload === "dropDown") { // Custom payload type is "dropDown"
             const dropDownData = response[i].custom.data;
             renderDropDwon(dropDownData);
             return;
           }
 
-          // check if the custom payload type is "location"
-          if (payload === "location") {
+          if (payload === "location") { // Custom payload type is "location"
             $("#userInput").prop("disabled", true);
             getLocation();
             scrollToBottomOfResults();
             return;
           }
 
-          // check if the custom payload type is "cardsCarousel"
-          if (payload === "cardsCarousel") {
+          if (payload === "cardsCarousel") { // Custom payload type is "cardsCarousel"
             const restaurantsData = response[i].custom.data;
             showCardsCarousel(restaurantsData);
             return;
           }
 
-          // check if the custom payload type is "chart"
-          if (payload === "chart") {
-            /**
-             * sample format of the charts data:
-             *  var chartData =  { "title": "Leaves", "labels": ["Sick Leave", "Casual Leave", "Earned Leave", "Flexi Leave"], "backgroundColor": ["#36a2eb", "#ffcd56", "#ff6384", "#009688", "#c45850"], "chartsData": [5, 10, 22, 3], "chartType": "pie", "displayLegend": "true" }
-             */
+          if (payload === "chart") { // Custom payload type is "chart"
+            // Sample format of the charts data:
+            // var chartData =  {
+            //  "title": "Leaves",
+            //  "labels": ["Sick Leave", "Casual Leave", "Earned Leave", "Flexi Leave"],
+            //  "backgroundColor": ["#36a2eb", "#ffcd56", "#ff6384", "#009688", "#c45850"],
+            //  "chartsData": [5, 10, 22, 3],
+            //  "chartType": "pie",
+            //  "displayLegend": "true"}
 
             const chartData = response[i].custom.data;
-            const {
-              title,
-              labels,
-              backgroundColor,
-              chartsData,
-              chartType,
-              displayLegend,
-            } = chartData;
+            const {title, labels, backgroundColor, chartsData, chartType, displayLegend} = chartData;
 
-            // pass the above variable to createChart function
-            createChart(
-              title,
-              labels,
-              backgroundColor,
-              chartsData,
-              chartType,
-              displayLegend
-            );
+            createChart(title, labels, backgroundColor, chartsData, chartType, displayLegend);
 
-            // on click of expand button, render the chart in the charts modal
+            // On click of the expand button, render the chart in the charts modal
             $(document).on("click", "#expand", () => {
-              createChartinModal(
-                title,
-                labels,
-                backgroundColor,
-                chartsData,
-                chartType,
-                displayLegend
-              );
+              createChartinModal(title, labels, backgroundColor, chartsData, chartType, displayLegend);
             });
             return;
           }
 
-          // check of the custom payload type is "collapsible"
-          if (payload === "collapsible") {
-            const { data } = response[i].custom;
-            // pass the data variable to createCollapsible function
+          if (payload === "collapsible") { // Custom payload type is "collapsible"
+            const {data} = response[i].custom;
             createCollapsible(data);
           }
         }
@@ -625,66 +628,22 @@ function setBotResponse(response) {
 }
 
 /**
- * Sends an event to the bot, so that bot can start the conversation with it.
- * `Note: this method will only work in Rasa 1.x`
- */
-function actionTrigger() {
-  $.ajax({
-    url: `http://localhost:5005/conversations/${sender_id}/execute`,
-    type: "POST",
-    contentType: "application/json",
-    data: JSON.stringify({
-      name: action_name,
-      policy: "MappingPolicy",
-      confidence: "0.98",
-    }),
-    success(botResponse, status) {
-      console.log("Response from Rasa: ", botResponse, "\nStatus: ", status);
-
-      if (Object.hasOwnProperty.call(botResponse, "messages")) {
-        setBotResponse(botResponse.messages);
-      }
-      $("#userInput").prop("disabled", false);
-    },
-    error(xhr, textStatus) {
-      // if there is no response from rasa server
-      setBotResponse("");
-      console.log("Error from bot end: ", textStatus);
-      $("#userInput").prop("disabled", false);
-    },
-  });
-}
-
-/**
- * Sends an event to the bot, so that bot can start the conversation with it.
- *
- * Make sure you run the action server using the command
- * `rasa run actions --cors "*"`
- *
- * `Note: this method will only work in Rasa 2.x`
+ * Sends an event to the bot, so that bot can start the conversation with it
  */
 // eslint-disable-next-line no-unused-vars
 function customActionTrigger() {
   $.ajax({
-    url: "http://localhost:5055/webhook/",
+    url: rasa_action_endpoint_url,
     type: "POST",
     contentType: "application/json",
-    data: JSON.stringify({
-      next_action: action_name,
-      tracker: {
-        sender_id,
-      },
-    }),
+    data: JSON.stringify({next_action: action_name, tracker: {sender_id}}),
     success(botResponse, status) {
-      console.log("Response from Rasa: ", botResponse, "\nStatus: ", status);
-
       if (Object.hasOwnProperty.call(botResponse, "responses")) {
         setBotResponse(botResponse.responses);
       }
       $("#userInput").prop("disabled", false);
     },
     error(xhr, textStatus) {
-      // if there is no response from rasa server
       setBotResponse("");
       console.log("Error from bot end: ", textStatus);
       $("#userInput").prop("disabled", false);
@@ -693,7 +652,7 @@ function customActionTrigger() {
 }
 
 /**
- * sends the user message to the rasa server,
+ * Sends the user message to the Rasa server
  * @param {String} message user message
  */
 function send(message) {
@@ -703,27 +662,15 @@ function send(message) {
     contentType: "application/json",
     data: JSON.stringify({ message, sender: sender_id }),
     success(botResponse, status) {
-      console.log("Response from Rasa: ", botResponse, "\nStatus: ", status);
-
-      // if user wants to restart the chat and clear the existing chat contents
-      if (message.toLowerCase() === "/restart") {
+      if (message.toLowerCase() === "/restart") { // Restart and clear chat
         $("#userInput").prop("disabled", false);
-
-        // if you want the bot to start the conversation after restart
+        // Start the conversation after restart
         customActionTrigger();
         return;
       }
       setBotResponse(botResponse);
     },
     error(xhr, textStatus) {
-      if (message.toLowerCase() === "/restart") {
-        $("#userInput").prop("disabled", false);
-        // if you want the bot to start the conversation after the restart action.
-        // actionTrigger();
-        // return;
-      }
-
-      // if there is no response from rasa server, set error bot response
       setBotResponse("");
       console.log("Error from bot end: ", textStatus);
     },
@@ -731,35 +678,36 @@ function send(message) {
 }
 
 /**
- * clears the conversation from the chat screen
- * & sends the `/resart` event to the Rasa server
+ * Clears the conversation from the chat screen and sends the `/resart` event to the Rasa server
  */
 function restartConversation() {
   $("#userInput").prop("disabled", true);
-  // destroy the existing chart
   $(".collapsible").remove();
+  
 
   if (typeof chatChart !== "undefined") {
     chatChart.destroy();
   }
 
   $(".chart-container").remove();
+
   if (typeof modalChart !== "undefined") {
     modalChart.destroy();
   }
+
   $(".chats").html("");
   $(".usrInput").val("");
   send("/restart");
 }
 
-// triggers restartConversation function.
+
+
+// "Restart" button triggers restartConversation function
 $("#restart").click(() => {
   restartConversation();
 });
 
-/**
- * if user hits enter or send button
- * */
+// User presses Enter key
 $(".usrInput").on("keyup keypress", (e) => {
   const keyCode = e.keyCode || e.which;
 
@@ -769,7 +717,7 @@ $(".usrInput").on("keyup keypress", (e) => {
       e.preventDefault();
       return false;
     }
-    // destroy the existing chart, if yu are not using charts, then comment the below lines
+    // Destroy the existing chart; if you are not using charts, comment the below lines
     $(".collapsible").remove();
     $(".dropDownMsg").remove();
     if (typeof chatChart !== "undefined") {
@@ -793,13 +741,14 @@ $(".usrInput").on("keyup keypress", (e) => {
   return true;
 });
 
+// User presses the "Send" button
 $("#sendButton").on("click", (e) => {
   const text = $(".usrInput").val();
   if (text === "" || $.trim(text) === "") {
     e.preventDefault();
     return false;
   }
-  // destroy the existing chart
+  // Destroy the existing chart; if you are not using charts, comment the below lines
   if (typeof chatChart !== "undefined") {
     chatChart.destroy();
   }
@@ -826,19 +775,7 @@ $("#profile_div").click(() => {
   $(".chat_widget").toggle();
 });
 
-// on click of suggestion's button, get the title value and send it to rasa
-$(document).on("click", ".menu .menuChips", function () {
-  const text = this.innerText;
-  const payload = this.getAttribute("data-payload");
-  console.log("payload: ", this.getAttribute("data-payload"));
-  setUserResponse(text);
-  send(payload);
-
-  // delete the suggestions once user click on it.
-  $(".suggestions").remove();
-});
-
-// clear function to clear the chat contents of the widget.
+// "Clear" button clears the chat contents
 $("#clear").click(() => {
   $(".chats").fadeOut("normal", () => {
     $(".chats").html("");
@@ -846,21 +783,27 @@ $("#clear").click(() => {
   });
 });
 
-// close function to close the widget.
+// "Close" button closes the widget
 $("#close").click(() => {
   $(".profile_div").toggle();
   $(".chat_widget").toggle();
   scrollToBottomOfResults();
 });
 
-// on click of quickreplies, get the payload value and send it to rasa
+// On click of quickReplies, get the payload value and send it to Rasa
 $(document).on("click", ".quickReplies .chip", function () {
   const text = this.innerText;
   const payload = this.getAttribute("data-payload");
-  console.log("chip payload: ", this.getAttribute("data-payload"));
   setUserResponse(text);
   send(payload);
-
-  // delete the quickreplies
   $(".quickReplies").remove();
+});
+
+// On click of the suggestion button, get the title value and send it to Rasa
+$(document).on("click", ".menu .menuChips", function () {
+  const text = this.innerText;
+  const payload = this.getAttribute("data-payload");
+  setUserResponse(text);
+  send(payload);
+  $(".suggestions").remove();
 });
