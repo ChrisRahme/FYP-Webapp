@@ -90,7 +90,7 @@ div.chats::-webkit-scrollbar {
 
 .botMsg, .botTyping {
   float: left;
-  background: #e3e7ee;
+  background: #E3E7EE;
   color: #000000;
   margin-left: 0.5em;
   border-radius: 5px 20px 20px 20px;
@@ -99,7 +99,7 @@ div.chats::-webkit-scrollbar {
 .userMsg {
   float: right;
   background: #060DCF;
-  color: white;
+  color: #FFFFFF;
   margin-right: 0.5em;
   border-radius: 20px 5px 20px 20px;
   animation: animateElement linear 0.2s;
@@ -123,7 +123,7 @@ div.chats::-webkit-scrollbar {
   width: 100%;
   padding: 5px;
   border-radius: 0px 0px 10px 10px;
-  border-top: 1px solid #e3e7ee;
+  border-top: 1px solid #E3E7EE;
 }
 
 #sendButton {
