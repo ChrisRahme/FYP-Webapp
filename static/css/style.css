@@ -79,7 +79,6 @@ div.chats::-webkit-scrollbar {
   animation-iteration-count: 1;
 }
 
-
 .botMsg, .userMsg, .botTyping {
   padding: 10px;
   margin: 5px;
