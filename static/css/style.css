@@ -339,10 +339,8 @@ div.content_data::-webkit-scrollbar {
 
 .imgcard {
   object-fit: cover;
-  width: 80%;
-  height: 50%;
+  width: 85%;
   border-radius: 10px;
-  margin-left: 1%;
 }
 
 /* Suggestions buttons */
