@@ -629,6 +629,7 @@ div.content_data::-webkit-scrollbar {
 }
 
 .collapsible-header {
+  padding: 10px;
   font-weight: bold;
   color: #060DCF;
 }
@@ -644,10 +645,6 @@ ul.collapsible > li:last-child .collapsible-header {
 
 ul.collapsible > li:last-child .collapsible-body {
   border-bottom: none;
-}
-
-.collapsible-header {
-  padding: 10px;
 }
 
 /* Bot typing */
