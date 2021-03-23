@@ -79,7 +79,6 @@ function setUserResponse(message) {
   $(".usrInput").val("");
   scrollToBottomOfResults();
   showBotTyping();
-  alert("test");
   //$(".suggestions").remove();
 }
 
@@ -90,11 +89,11 @@ function setUserResponse(message) {
 function addSuggestion(suggestions) {
   setTimeout(() => {
     const suggLength = suggestions.length;
-    $('<div class="singleCard"><div class="suggestions"><div class="menu"></div></div></div>').appendTo(".chats").hide().fadeIn(1000);
+    $('<div class="singleCard"><div class="suggestions"><div class="menu"></div></div></div>').appendTo(".chats").hide().fadeIn(500);
     
     // Loop through suggestions
     for (let i = 0; i < suggLength; i += 1) {
-      $(`<div class="menuChips" data-payload='${suggestions[i].payload}'>${suggestions[i].title}</div>`).appendTo(".menu");
+      $(`<div class="menuChips" data-payload='${suggestions[i].payload}'>${suggestions[i].title}</div>`).appendTo("#chats .singleCard:last-of-type .suggestions .menu");
     }
     scrollToBottomOfResults();
   }, 1000);
@@ -666,6 +665,7 @@ function restartConversation() {
   $("#userInput").prop("disabled", true);
   $(".collapsible").remove();
   
+
   if (typeof chatChart !== "undefined") {
     chatChart.destroy();
   }
@@ -679,26 +679,6 @@ function restartConversation() {
   $(".chats").html("");
   $(".usrInput").val("");
   send("/restart");
-}
-
-function onSendMessage() {
-  // Destroy the existing chart; if you are not using charts, comment the below `if``
-  if (typeof chatChart !== "undefined") {
-    chatChart.destroy();
-  }
-  
-  $(".chart-container").remove();
-  if (typeof modalChart !== "undefined") {
-    modalChart.destroy();
-  }
-
-  $("#paginated_cards").remove();
-  $(".suggestions").remove();
-  $(".quickReplies").remove();
-  $(".usrInput").blur();
-  setUserResponse(text);
-  send(text);
-  e.preventDefault();
 }
 
 
@@ -721,7 +701,22 @@ $(".usrInput").on("keyup keypress", (e) => {
     // Destroy the existing chart; if you are not using charts, comment the below lines
     $(".collapsible").remove();
     $(".dropDownMsg").remove();
-    onSendMessage();
+    if (typeof chatChart !== "undefined") {
+      chatChart.destroy();
+    }
+
+    $(".chart-container").remove();
+    if (typeof modalChart !== "undefined") {
+      modalChart.destroy();
+    }
+
+    $("#paginated_cards").remove();
+    //$(".suggestions").remove();
+    $(".quickReplies").remove();
+    $(".usrInput").blur();
+    setUserResponse(text);
+    send(text);
+    e.preventDefault();
     return false;
   }
   return true;
@@ -734,7 +729,24 @@ $("#sendButton").on("click", (e) => {
     e.preventDefault();
     return false;
   }
-  onSendMessage();
+  // Destroy the existing chart; if you are not using charts, comment the below lines
+  if (typeof chatChart !== "undefined") {
+    chatChart.destroy();
+  }
+
+  $(".chart-container").remove();
+  if (typeof modalChart !== "undefined") {
+    modalChart.destroy();
+  }
+
+  //$(".suggestions").remove();
+  $("#paginated_cards").remove();
+  $(".quickReplies").remove();
+  $(".usrInput").blur();
+  $(".dropDownMsg").remove();
+  setUserResponse(text);
+  send(text);
+  e.preventDefault();
   return false;
 });
 
@@ -774,5 +786,5 @@ $(document).on("click", ".menu .menuChips", function () {
   const payload = this.getAttribute("data-payload");
   setUserResponse(text);
   send(payload);
-  $(".suggestions").remove();
+  //$(".suggestions").remove();
 });
