@@ -9,44 +9,25 @@ const server = "localhost"
 const rasa_action_endpoint_url = `http://${server}:5055/webhook`
 const rasa_server_url = `http://${server}:5005/webhooks/rest/webhook`;
 
-const botPic  = "./static/img/botAvatar_rasa.png";
-const userPic = "./static/img/userAvatar.jpg"
+const botPic  = "./assets/img/botAvatar_rasa.png";
+const userPic = "./assets/img/userAvatar.jpg"
 
 const action_name = "action_utter_greet";
 const sender_id = uuidv4();
 
 
 
-// Bot pop-up intro
-document.addEventListener("DOMContentLoaded", () => {
-  const elemsTap = document.querySelector(".tap-target");
-  // eslint-disable-next-line no-undef
-  const instancesTap = M.TapTarget.init(elemsTap, {});
-  instancesTap.open();
-  setTimeout(() => {
-    instancesTap.close();
-  }, 4000);
-});
-
-
-
 // Initialization
 $(document).ready(() => {
-  // Bot pop-up intro
-  $("div").removeClass("tap-target-origin");
-
   // Dropdown menu
   $(".dropdown-trigger").dropdown();
-
+  
   // Initiate the modal for displaying charts
   $(".modal").modal();
 
-  // TODO Check this
-  // If the bot to starts the conversation 
-  //showBotTyping();
-  //$("#userInput").prop('disabled', true);
-
-  // If you want the bot to start the conversation
+  // If the bot starts the conversation 
+  showBotTyping();
+  $("#userInput").prop('disabled', true);
   customActionTrigger();
 });
 
@@ -98,7 +79,8 @@ function setUserResponse(message) {
   $(".usrInput").val("");
   scrollToBottomOfResults();
   showBotTyping();
-  $(".suggestions").remove();
+  alert("test");
+  //$(".suggestions").remove();
 }
 
 /**
@@ -684,7 +666,6 @@ function restartConversation() {
   $("#userInput").prop("disabled", true);
   $(".collapsible").remove();
   
-
   if (typeof chatChart !== "undefined") {
     chatChart.destroy();
   }
@@ -698,6 +679,26 @@ function restartConversation() {
   $(".chats").html("");
   $(".usrInput").val("");
   send("/restart");
+}
+
+function onSendMessage() {
+  // Destroy the existing chart; if you are not using charts, comment the below `if``
+  if (typeof chatChart !== "undefined") {
+    chatChart.destroy();
+  }
+  
+  $(".chart-container").remove();
+  if (typeof modalChart !== "undefined") {
+    modalChart.destroy();
+  }
+
+  $("#paginated_cards").remove();
+  $(".suggestions").remove();
+  $(".quickReplies").remove();
+  $(".usrInput").blur();
+  setUserResponse(text);
+  send(text);
+  e.preventDefault();
 }
 
 
@@ -720,22 +721,7 @@ $(".usrInput").on("keyup keypress", (e) => {
     // Destroy the existing chart; if you are not using charts, comment the below lines
     $(".collapsible").remove();
     $(".dropDownMsg").remove();
-    if (typeof chatChart !== "undefined") {
-      chatChart.destroy();
-    }
-
-    $(".chart-container").remove();
-    if (typeof modalChart !== "undefined") {
-      modalChart.destroy();
-    }
-
-    $("#paginated_cards").remove();
-    $(".suggestions").remove();
-    $(".quickReplies").remove();
-    $(".usrInput").blur();
-    setUserResponse(text);
-    send(text);
-    e.preventDefault();
+    onSendMessage();
     return false;
   }
   return true;
@@ -748,24 +734,7 @@ $("#sendButton").on("click", (e) => {
     e.preventDefault();
     return false;
   }
-  // Destroy the existing chart; if you are not using charts, comment the below lines
-  if (typeof chatChart !== "undefined") {
-    chatChart.destroy();
-  }
-
-  $(".chart-container").remove();
-  if (typeof modalChart !== "undefined") {
-    modalChart.destroy();
-  }
-
-  $(".suggestions").remove();
-  $("#paginated_cards").remove();
-  $(".quickReplies").remove();
-  $(".usrInput").blur();
-  $(".dropDownMsg").remove();
-  setUserResponse(text);
-  send(text);
-  e.preventDefault();
+  onSendMessage();
   return false;
 });
 

@@ -334,6 +334,8 @@ div.content_data::-webkit-scrollbar {
 
 .menu {
   padding: 5px;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .suggestions {
@@ -354,15 +356,24 @@ div.content_data::-webkit-scrollbar {
   background: #060DCF;
   color: #FFFFFF;
   padding: 5px;
-  margin-bottom: 5px;
+  margin-bottom: 6px;
   border-radius: 15px;
   text-align: center;
   font-size: 14px;
   cursor: pointer;
   word-wrap: break-word;
+  flex: 45%;
 }
 
-.menu > .menuChips:last-child {
+.menu > .menuChips:nth-child(2n) {
+  margin-left: 3px;
+}
+
+.menu > .menuChips:nth-child(2n+1) {
+  margin-right: 3px;
+}
+
+.menu > .menuChips:last-child, .menu > .menuChips:nth-last-child(2):nth-child(2n+1) {
   margin-bottom: 0;
 }
 
