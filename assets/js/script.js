@@ -74,7 +74,7 @@ function setUserResponse(message) {
     <img class="userAvatar" src="${userPic}">
     <p class="userMsg">${message}</p>
     <div class="clearfix"></div>`;
-  $(user_response).appendTo(".chats").show("slow");
+  $(user_response).appendTo(".chats").show("fast");
 
   $(".usrInput").val("");
   scrollToBottomOfChat();
@@ -83,23 +83,22 @@ function setUserResponse(message) {
 }
 
 /**
- * Adds vertically stacked buttons as a bot response
+ * Adds buttons as a bot response
  * @param {Array} suggestions buttons json array
  */
 function addSuggestion(suggestions) {
   setTimeout(() => {
-    const suggLength = suggestions.length;
-    $('<div class="singleCard"><div class="suggestions"><div class="menu"></div></div></div>').appendTo(".chats").hide().fadeIn(500);
+    $('<div class="singleCard"><div class="suggestions"><div class="menu"></div></div></div>')
+      .appendTo(".chats").hide().fadeIn(500);
     
-    // Loop through suggestions
-    for (let i = 0; i < suggLength; i += 1) {
+    for (let i = 0; i < suggestions.length; i += 1) {
       $(`<div class="menuChips" data-payload='${suggestions[i].payload}'>${suggestions[i].title}</div>`)
-      .appendTo("#chats .singleCard:last-of-type .suggestions .menu");
+        .appendTo("#chats .singleCard:last-of-type .suggestions .menu");
     }
 
     //$("#userInput").prop('disabled', true);
     scrollToBottomOfChat();
-  }, 1000);
+  }, 500);
 }
 
 /**
@@ -493,7 +492,8 @@ function createChartinModal(title, labels, backgroundColor, chartsData, chartTyp
  * @param {Array} response json array containing different types of bot response
  */
 function setBotResponse(response) {
-  // Renders bot response after 500 milliseconds
+  const fadeTime = 500;
+
   setTimeout(() => {
     hideBotTyping();
     if (response.length < 1) { // There is no response from Rasa
@@ -503,7 +503,7 @@ function setBotResponse(response) {
         <p class="botMsg">${fallbackMsg}</p>
         <div class="clearfix"></div>`;
 
-      $(BotResponse).appendTo(".chats").hide().fadeIn(1000);
+      $(BotResponse).appendTo(".chats").hide().fadeIn(fadeTime);
       scrollToBottomOfChat();
     } else { // Response received from Rasa
       for (let i = 0; i < response.length; i += 1) {
@@ -514,7 +514,18 @@ function setBotResponse(response) {
               <img class="botAvatar" src="${botPic}"/>
               <p class="botMsg">${formatted_text}</p>
               <div class="clearfix"></div>`;
-            $(BotResponse).appendTo(".chats").hide().fadeIn(1000);
+            $(BotResponse).appendTo(".chats").hide().fadeIn(fadeTime);
+          }
+        }
+
+        if (Object.hasOwnProperty.call(response[i], "response")) { // Response contains "response"
+          if (response[i].response != null) {
+            var formatted_text = response[i].response.replace(/(?:\r\n|\r|\n)/g, '<br>') // TODO Now only prints response name
+            const BotResponse = `
+              <img class="botAvatar" src="${botPic}"/>
+              <p class="botMsg">${formatted_text}</p>
+              <div class="clearfix"></div>`;
+            $(BotResponse).appendTo(".chats").hide().fadeIn(fadeTime);
           }
         }
 
@@ -524,7 +535,7 @@ function setBotResponse(response) {
               <div class="singleCard">
                 <img class="imgcard" src="${response[i].image}">
               </div><div class="clearfix">`;
-            $(BotResponse).appendTo(".chats").hide().fadeIn(1000);
+            $(BotResponse).appendTo(".chats").hide().fadeIn(fadeTime);
           }
         }
 
@@ -541,7 +552,7 @@ function setBotResponse(response) {
                 <div class="video-container">
                   <iframe src="${response[i].attachment.payload.src}" frameborder="0" allowfullscreen></iframe>
                 </div>`;
-              $(BotResponse).appendTo(".chats").hide().fadeIn(1000);
+              $(BotResponse).appendTo(".chats").hide().fadeIn(fadeTime);
             }
           }
         }
@@ -624,6 +635,7 @@ function customActionTrigger() {
     success(botResponse, status) {
       if (Object.hasOwnProperty.call(botResponse, "responses")) {
         setBotResponse(botResponse.responses);
+        //console.log(JSON.stringify(botResponse));
       }
       $("#userInput").prop("disabled", false);
     },
@@ -648,7 +660,6 @@ function send(message) {
     success(botResponse, status) {
       if (message.toLowerCase() === "/restart") { // Restart and clear chat
         $("#userInput").prop("disabled", false);
-        // Start the conversation after restart
         customActionTrigger();
         return;
       }
