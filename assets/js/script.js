@@ -36,7 +36,7 @@ $(document).ready(() => {
 /**
  * Scrolls to the bottom of the conversation after new message
  */
-function scrollToBottomOfResults() {
+function scrollToBottomOfChat() {
   const terminalResultsDiv = document.getElementById("chats");
   terminalResultsDiv.scrollTop = terminalResultsDiv.scrollHeight;
 }
@@ -62,7 +62,7 @@ function showBotTyping() {
     </div>`;
   $(botTyping).appendTo(".chats");
   $(".botTyping").show();
-  scrollToBottomOfResults();
+  scrollToBottomOfChat();
 }
 
 /**
@@ -77,7 +77,7 @@ function setUserResponse(message) {
   $(user_response).appendTo(".chats").show("slow");
 
   $(".usrInput").val("");
-  scrollToBottomOfResults();
+  scrollToBottomOfChat();
   showBotTyping();
   //$(".suggestions").remove();
 }
@@ -93,9 +93,12 @@ function addSuggestion(suggestions) {
     
     // Loop through suggestions
     for (let i = 0; i < suggLength; i += 1) {
-      $(`<div class="menuChips" data-payload='${suggestions[i].payload}'>${suggestions[i].title}</div>`).appendTo("#chats .singleCard:last-of-type .suggestions .menu");
+      $(`<div class="menuChips" data-payload='${suggestions[i].payload}'>${suggestions[i].title}</div>`)
+      .appendTo("#chats .singleCard:last-of-type .suggestions .menu");
     }
-    scrollToBottomOfResults();
+
+    //$("#userInput").prop('disabled', true);
+    scrollToBottomOfChat();
   }, 1000);
 }
 
@@ -154,7 +157,7 @@ function showCardsCarousel(cardsToAdd) {
     $(".cards .arrow.next").fadeIn("3000");
   }
 
-  scrollToBottomOfResults();
+  scrollToBottomOfChat();
 
   const card = document.querySelector("#paginated_cards");
   const card_scroller = card.querySelector(".cards_scroller");
@@ -192,7 +195,7 @@ function showQuickReplies(quickRepliesData) {
 
   const quickReplies = `<div class="quickReplies">${chips}</div><div class="clearfix"></div>`;
   $(quickReplies).appendTo(".chats").fadeIn(1000);
-  scrollToBottomOfResults();
+  scrollToBottomOfChat();
 
   const slider = document.querySelector(".quickReplies");
   let isDown = false;
@@ -242,7 +245,7 @@ function renderPdfAttachment(pdf_data) {
     </div>`;
 
   $(".chats").append(pdf_attachment);
-  scrollToBottomOfResults();
+  scrollToBottomOfChat();
 }
 
 /**
@@ -266,7 +269,7 @@ function renderDropDwon(drop_down_data) {
     </div>`;
   
   $(".chats").append(drop_down_select);
-  scrollToBottomOfResults();
+  scrollToBottomOfChat();
 
   // Add event handler if user selects a option
   // eslint-disable-next-line func-names
@@ -368,7 +371,7 @@ function createCollapsible(collapsible_data) {
 
   // Initialize the collapsible
   $(".collapsible").collapsible();
-  scrollToBottomOfResults();
+  scrollToBottomOfChat();
 }
 
 /**
@@ -433,7 +436,7 @@ function createChart(title, labels, backgroundColor, chartsData, chartType, disp
   // eslint-disable-next-line no-undef
   chatChart = new Chart(ctx, {type: chartType, data, options});
 
-  scrollToBottomOfResults();
+  scrollToBottomOfChat();
 }
 
 /**
@@ -501,7 +504,7 @@ function setBotResponse(response) {
         <div class="clearfix"></div>`;
 
       $(BotResponse).appendTo(".chats").hide().fadeIn(1000);
-      scrollToBottomOfResults();
+      scrollToBottomOfChat();
     } else { // Response received from Rasa
       for (let i = 0; i < response.length; i += 1) {
         if (Object.hasOwnProperty.call(response[i], "text")) { // Response contains "text"
@@ -565,7 +568,7 @@ function setBotResponse(response) {
           if (payload === "location") { // Custom payload type is "location"
             $("#userInput").prop("disabled", true);
             getLocation();
-            scrollToBottomOfResults();
+            scrollToBottomOfChat();
             return;
           }
 
@@ -603,7 +606,7 @@ function setBotResponse(response) {
           }
         }
       }
-      scrollToBottomOfResults();
+      scrollToBottomOfChat();
     }
   }, 500);
 }
@@ -768,7 +771,7 @@ $("#clear").click(() => {
 $("#close").click(() => {
   $(".profile_div").toggle();
   $(".chat_widget").toggle();
-  scrollToBottomOfResults();
+  scrollToBottomOfChat();
 });
 
 // On click of quickReplies, get the payload value and send it to Rasa
