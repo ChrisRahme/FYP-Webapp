@@ -320,6 +320,7 @@ div.content_data::-webkit-scrollbar {
 .singleCard {
   padding-left: calc(12px + 1.5em);
   padding-right: calc(12px + 1.5em);
+  margin-bottom: 5px;
 }
 
 /* Image card */
@@ -328,21 +329,18 @@ div.content_data::-webkit-scrollbar {
   object-fit: cover;
   width: 85%;
   border-radius: 10px;
+  margin-bottom: 5px;
 }
 
 /* Suggestion buttons */
 
 .menu {
-  padding: 5px;
   display: flex;
   flex-wrap: wrap;
 }
 
 .suggestions {
-  padding: 5px;
-  border-radius: 10px;
   background: #FFFFFF;
-  box-shadow: 2px 5px 5px 1px #DBDADE;
 }
 
 .menuTitle {
@@ -353,7 +351,7 @@ div.content_data::-webkit-scrollbar {
 
 .menuChips {
   display: block;
-  background: #060DCF;
+  background: #A0B4D5;
   color: #FFFFFF;
   padding: 5px;
   margin-bottom: 6px;
@@ -363,6 +361,14 @@ div.content_data::-webkit-scrollbar {
   cursor: pointer;
   word-wrap: break-word;
   flex: 45%;
+}
+
+.menuChips:hover {
+  background: #6888bc;
+}
+
+.menuChips:active {
+  background: #3961a2;
 }
 
 .menu > .menuChips:nth-child(2n) {

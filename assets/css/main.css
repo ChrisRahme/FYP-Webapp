@@ -16,25 +16,3 @@ body {
     color: #4d4b4b;
     line-height: 1.6;
 }
-
-.chat-container {
-    width: 25vw;
-    float: right;
-}
-
-.chat-container ::-webkit-scrollbar {
-    width: 10px;
-}
-  
-.chat-container ::-webkit-scrollbar-track {
-    background: #F4F7F9;
-}
-   
-.chat-container ::-webkit-scrollbar-thumb {
-    background: #574AE2;
-}
-  
-.chat-container ::-webkit-scrollbar-thumb:hover {
-    background: #574ae2ec;
-    cursor: help;
-}
