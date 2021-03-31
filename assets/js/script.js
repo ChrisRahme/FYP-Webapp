@@ -5,9 +5,13 @@
 /* eslint-disable no-console */
 /* eslint-disable camelcase */
 
-const server = "194.126.17.114"; //"localhost";
-const rasa_action_endpoint_url = `http://${server}:5055/webhook`
-const rasa_server_url = `http://${server}:5005/webhooks/rest/webhook`;
+// const server = "localhost";
+// const rasa_action_endpoint_url = `http://${server}:5055/webhook`
+// const rasa_server_url = `http://${server}:5005/webhooks/rest/webhook`;
+const server = "194.126.17.114";
+const rasa_action_endpoint_url = `http://${server}/webhook`
+const rasa_server_url = `http://${server}/webhooks/rest/webhook`;
+
 
 const botPic  = "./assets/img/botAvatar_rasa.png";
 const userPic = "./assets/img/userAvatar.jpg"
