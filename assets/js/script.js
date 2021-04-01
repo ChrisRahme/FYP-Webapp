@@ -8,8 +8,8 @@
 // const rasa_action_endpoint_url = "http://localhost:5055/webhook";
 // const rasa_server_url = "http://localhost:5005/webhooks/rest/webhook";
 const IP = "194.126.17.114";
-const rasa_action_endpoint_url = `http://${server}/webhook`;
-const rasa_server_url = `http://${server}/webhooks/rest/webhook`;
+const rasa_action_endpoint_url = `http://${IP}/webhook`;
+const rasa_server_url = `http://${IP}/webhooks/rest/webhook`;
 
 
 const botPic  = "./assets/img/botAvatar_rasa.png";
