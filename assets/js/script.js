@@ -5,12 +5,12 @@
 /* eslint-disable no-console */
 /* eslint-disable camelcase */
 
-// const server = "localhost";
-// const rasa_action_endpoint_url = `http://${server}:5055/webhook`
-// const rasa_server_url = `http://${server}:5005/webhooks/rest/webhook`;
-const server = "194.126.17.114";
-const rasa_action_endpoint_url = `http://${server}/webhook`
-const rasa_server_url = `http://${server}/webhooks/rest/webhook`;
+const server = "localhost";
+const rasa_action_endpoint_url = `http://${server}:5055/webhook`
+const rasa_server_url = `http://${server}:5005/webhooks/rest/webhook`;
+// const server = "194.126.17.114";
+// const rasa_action_endpoint_url = `http://${server}/webhook`
+// const rasa_server_url = `http://${server}/webhooks/rest/webhook`;
 
 
 const botPic  = "./assets/img/botAvatar_rasa.png";
@@ -631,7 +631,9 @@ function setBotResponse(response) {
  */
 // eslint-disable-next-line no-unused-vars
 function customActionTrigger() {
-  $.ajax({
+  send("Hello");
+  $("#userInput").prop('disabled', false);
+  /*$.ajax({
     url: rasa_action_endpoint_url,
     type: "POST",
     contentType: "application/json",
@@ -639,7 +641,7 @@ function customActionTrigger() {
     success(botResponse, status) {
       if (Object.hasOwnProperty.call(botResponse, "responses")) {
         setBotResponse(botResponse.responses);
-        //console.log(JSON.stringify(botResponse));
+        console.log(JSON.stringify(botResponse));
       }
       $("#userInput").prop("disabled", false);
     },
@@ -648,7 +650,7 @@ function customActionTrigger() {
       console.log("Error from bot end: ", textStatus);
       $("#userInput").prop("disabled", false);
     },
-  });
+  });*/
 }
 
 /**
