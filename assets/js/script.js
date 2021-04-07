@@ -16,7 +16,7 @@ const botPic  = "./assets/img/botAvatar_rasa.png";
 const userPic = "./assets/img/userAvatar.jpg";
 
 const action_name = "action_utter_greet";
-const sender_id = uuidv4();
+const sender_id = "W-" + uuidv4();
 
 
 
