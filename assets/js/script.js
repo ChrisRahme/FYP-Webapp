@@ -10,6 +10,7 @@
 const IP = "194.126.17.114";
 const rasa_action_endpoint_url = `http://${IP}/webhook`;
 const rasa_server_url = `http://${IP}/webhooks/rest/webhook`;
+const handoff_server_url = `http://${IP}/webhooks/rest/webhook`;
 
 
 const botPic  = "./assets/img/botAvatar_rasa.png";
@@ -17,6 +18,8 @@ const userPic = "./assets/img/userAvatar.jpg";
 
 const action_name = "action_utter_greet";
 const sender_id = "W-" + uuidv4();
+
+var handoff = false;
 
 
 
@@ -496,10 +499,11 @@ function createChartinModal(title, labels, backgroundColor, chartsData, chartTyp
  */
 function setBotResponse(response) {
   const fadeTime = 500;
+  const timeoutTime = handoff ? 3000 : 500 // 600000
 
   setTimeout(() => {
     hideBotTyping();
-    if (response.length < 1) { // There is no response from Rasa
+    if (response.length < 1) { // There is no response from Rasa or human
       const fallbackMsg = "I am facing some issues, please try again later.";
       const BotResponse = `
         <img class="botAvatar" src="${botPic}"/>
@@ -508,7 +512,7 @@ function setBotResponse(response) {
 
       $(BotResponse).appendTo(".chats").hide().fadeIn(fadeTime);
       scrollToBottomOfChat();
-    } else { // Response received from Rasa
+    } else { // Response received from Rasa or human
       for (let i = 0; i < response.length; i += 1) {
         if (Object.hasOwnProperty.call(response[i], "text")) { // Response contains "text"
           if (response[i].text != null) {
@@ -521,7 +525,7 @@ function setBotResponse(response) {
           }
         }
 
-        if (Object.hasOwnProperty.call(response[i], "response")) { // Response contains "response"
+        /*if (Object.hasOwnProperty.call(response[i], "response")) { // Response contains "response"
           if (response[i].response != null) {
             var formatted_text = response[i].response.replace(/(?:\r\n|\r|\n)/g, '<br>') // TODO Now only prints response name
             const BotResponse = `
@@ -530,7 +534,7 @@ function setBotResponse(response) {
               <div class="clearfix"></div>`;
             $(BotResponse).appendTo(".chats").hide().fadeIn(fadeTime);
           }
-        }
+        }*/
 
         if (Object.hasOwnProperty.call(response[i], "image")) { // Response contains "images"
           if (response[i].image !== null) {
@@ -545,6 +549,7 @@ function setBotResponse(response) {
         if (Object.hasOwnProperty.call(response[i], "buttons")) { // Response contains "buttons"
           if (response[i].buttons.length > 0) {
             addSuggestion(response[i].buttons);
+            console.log(response[i].buttons);
           }
         }
 
@@ -622,7 +627,7 @@ function setBotResponse(response) {
       }
       scrollToBottomOfChat();
     }
-  }, 500);
+  }, timeoutTime);
 }
 
 /**
@@ -657,8 +662,10 @@ function customActionTrigger() {
  * @param {String} message user message
  */
 function send(message) {
+  server_url = handoff ? handoff_server_url : rasa_server_url;
+
   $.ajax({
-    url: rasa_server_url,
+    url: server_url,
     type: "POST",
     contentType: "application/json",
     data: JSON.stringify({ message, sender: sender_id }),
@@ -666,6 +673,10 @@ function send(message) {
       if (message.toLowerCase() === "/restart") { // Restart and clear chat
         $("#userInput").prop("disabled", false);
         customActionTrigger();
+        return;
+      } else if (message.toLowerCase() === "/handoff") { // Human handoff
+        handoff = true;
+        setBotResponse([{"text": "A human will be with you shortly."}])
         return;
       }
       setBotResponse(botResponse);
@@ -678,7 +689,7 @@ function send(message) {
 }
 
 /**
- * Clears the conversation from the chat screen and sends the `/resart` event to the Rasa server
+ * Clears the conversation from the chat screen and sends the `/restart` event to the Rasa server
  */
 function restartConversation() {
   $("#userInput").prop("disabled", true);
