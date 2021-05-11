@@ -1,5 +1,7 @@
 # Folders
 .old/
+#chat/lib/config.php
+nbproject/*
 __pycache__/
 
 # Files in folders
