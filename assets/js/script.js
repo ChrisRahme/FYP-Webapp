@@ -10,16 +10,15 @@
 const IP = "194.126.17.114";
 const rasa_action_endpoint_url = `http://${IP}/webhook`;
 const rasa_server_url = `http://${IP}/webhooks/rest/webhook`;
-const handoff_server_url = `http://${IP}/webhooks/rest/webhook`;
+// const handoff_server_url = `http://${IP}/webhooks/rest/webhook`; // UNUSED Human handoff
 
-
-const botPic  = "./assets/img/botAvatar_rasa.png";
-const userPic = "./assets/img/userAvatar.jpg";
+const botPic  = "./assets/img/botAvatar.png";
+const userPic = "./assets/img/userAvatar.png";
 
 const action_name = "action_utter_greet";
 const sender_id = "W-" + uuidv4();
 
-var handoff = false;
+// var handoff = false; UNUSED Human handoff
 
 
 
@@ -499,7 +498,7 @@ function createChartinModal(title, labels, backgroundColor, chartsData, chartTyp
  */
 function setBotResponse(response) {
   const fadeTime = 500;
-  const timeoutTime = handoff ? 3000 : 500 // 600000
+  const timeoutTime = 500;
 
   setTimeout(() => {
     hideBotTyping();
@@ -549,7 +548,6 @@ function setBotResponse(response) {
         if (Object.hasOwnProperty.call(response[i], "buttons")) { // Response contains "buttons"
           if (response[i].buttons.length > 0) {
             addSuggestion(response[i].buttons);
-            console.log(response[i].buttons);
           }
         }
 
@@ -662,7 +660,8 @@ function customActionTrigger() {
  * @param {String} message user message
  */
 function send(message) {
-  server_url = handoff ? handoff_server_url : rasa_server_url;
+  // server_url = handoff ? handoff_server_url : rasa_server_url; // UNUSED Human handoff
+  server_url = rasa_server_url;
 
   $.ajax({
     url: server_url,
@@ -674,11 +673,11 @@ function send(message) {
         $("#userInput").prop("disabled", false);
         customActionTrigger();
         return;
-      } else if (message.toLowerCase() === "/handoff") { // Human handoff
+      } /*else if (message.toLowerCase() === "/handoff") { // UNUSED Human handoff
         handoff = true;
         setBotResponse([{"text": "A human will be with you shortly."}])
         return;
-      }
+      }*/
       setBotResponse(botResponse);
     },
     error(xhr, textStatus) {
@@ -695,7 +694,6 @@ function restartConversation() {
   $("#userInput").prop("disabled", true);
   $(".collapsible").remove();
   
-
   if (typeof chatChart !== "undefined") {
     chatChart.destroy();
   }
@@ -711,12 +709,13 @@ function restartConversation() {
   send("/restart");
 }
 
-
-
-// "Restart" button triggers restartConversation function
-$("#restart").click(() => {
-  restartConversation();
-});
+/**
+ * Sends the `/request_human` intent to the Rasa server
+ */
+ function requestHuman() {
+  setUserResponse("I request human assistance.")
+  send("/request_human");
+}
 
 // User presses Enter key
 $(".usrInput").on("keyup keypress", (e) => {
@@ -787,7 +786,7 @@ $("#profile_div").click(() => {
 });
 
 // "Clear" button clears the chat contents
-$("#clear").click(() => {
+$("#clear-chat").click(() => {
   $(".chats").fadeOut("normal", () => {
     $(".chats").html("");
     $(".chats").fadeIn();
@@ -795,10 +794,27 @@ $("#clear").click(() => {
 });
 
 // "Close" button closes the widget
-$("#close").click(() => {
+$("#close-chat").click(() => {
   $(".profile_div").toggle();
   $(".chat_widget").toggle();
   scrollToBottomOfChat();
+});
+
+// "Close" arrow closes the widget
+$("#close-chat-arrow").click(() => {
+  $(".profile_div").toggle();
+  $(".chat_widget").toggle();
+  scrollToBottomOfChat();
+});
+
+// "Restart" button triggers restartConversation function
+$("#restart-chat").click(() => {
+  restartConversation();
+});
+
+// "Request Human" button triggers requestHuman function
+$("#handoff-chat").click(() => {
+  requestHuman();
 });
 
 // On click of quickReplies, get the payload value and send it to Rasa

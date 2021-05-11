@@ -41,20 +41,24 @@
       <div class="chat_widget">
         <div class="chat_header">
           <!--Add the name of the bot here -->
-          <span class="chat_header_title">Rasa Bot</span>
+          <span class="close-trigger" href="#">
+            <i id="close-chat-arrow" class="material-icons">close</i>
+          </span>
+          <span class="chat_header_title">IDM Chatbot</span>
           <span class="dropdown-trigger" href="#" data-target="dropdown1">
-            <i class="material-icons">more_vert</i>
+            <i class="material-icons">menu</i>
           </span>
 
           <!-- Dropdown menu-->
           <ul id="dropdown1" class="dropdown-content">
-            <li><a href="#" id="clear">Clear</a></li>
-            <li><a href="#" id="restart">Restart</a></li>
-            <li><a href="#" id="close">Close</a></li>
+            <li><a href="#" id="close-chat"  >Close</a></li>
+            <li><a href="#" id="clear-chat"  >Clear</a></li>
+            <li><a href="#" id="restart-chat">Restart</a></li>
+            <li><a href="#" id="handoff-chat">Request Human</a></li>
           </ul>
         </div>
 
-        <!-- Chatbot contents goes here -->
+        <!-- Chat content goes here -->
         <div class="chats" id="chats">
           <div class="clearfix"></div>
         </div>
@@ -69,7 +73,7 @@
 
       <!-- Bot profile -->
       <div class="profile_div" id="profile_div">
-        <img class="imgProfile" src="assets/img/botAvatar.png" />
+        <img class="imgProfile" src="assets/img/chatIcon.png" />
       </div>
     </div>
 
