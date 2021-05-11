@@ -27,8 +27,8 @@
   position: absolute;
   margin: 0;
   color: white;
-  -ms-transform: translateY(-50%);
-  transform: translate(-50%, 15%);
+  -ms-transform: translate(-65%, 15%);
+  transform: translate(-65%, 15%);
 }
 
 .chats {
@@ -154,8 +154,12 @@ div.chats::-webkit-scrollbar {
 
 /* Dropdown menu */
 
-#close, #restart, #clear {
+.close-trigger {
   cursor: pointer;
+  color: white;
+  margin-left: 5px;
+  float: left;
+  transform: translate(0, 35%);
 }
 
 .dropdown-trigger {
@@ -166,8 +170,13 @@ div.chats::-webkit-scrollbar {
   transform: translate(0, 35%);
 }
 
+#dropdown1 {
+  width: 140px !important;
+}
+
 .dropdown-content li > a,
 .dropdown-content li > span {
+  cursor: pointer;
   color: #060DCF;
 }
 
