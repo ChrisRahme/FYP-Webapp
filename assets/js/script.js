@@ -15,10 +15,10 @@ const rasa_server_url = "http://localhost:5005/webhooks/rest/webhook";
 const botPic  = "./assets/img/botAvatar.png";
 const userPic = "./assets/img/userAvatar.png";
 
-const initial_message = "Hello"; // The user message that starts the conversation
+const action_name = "action_utter_greet";
 const sender_id = "W-" + uuidv4();
 
-//var handoff = false; UNUSED Human handoff
+// var handoff = false; UNUSED Human handoff
 
 
 
@@ -26,13 +26,10 @@ const sender_id = "W-" + uuidv4();
 $(document).ready(() => {
   // Dropdown menu
   $(".dropdown-trigger").dropdown();
-  
-  // Initiate the modal for displaying charts
-  $(".modal").modal();
 
   // If the bot starts the conversation 
   showBotTyping();
-  $("#userInput").prop('disabled', true);
+  $("#userInput").prop("disabled", true);
   customActionTrigger();
 });
 
@@ -42,8 +39,16 @@ $(document).ready(() => {
  * Scrolls to the bottom of the conversation after new message
  */
 function scrollToBottomOfChat() {
-  const terminalResultsDiv = document.getElementById("chats");
-  terminalResultsDiv.scrollTop = terminalResultsDiv.scrollHeight;
+  const chats = document.getElementById("chats");
+  chats.scrollTop = chats.scrollHeight;
+}
+
+/**
+ * Removes the bot typing indicator from the chat screen
+ */
+function hideBotTyping() {
+  $("#botAvatar").remove();
+  $(".botTyping").remove();
 }
 
 /**
@@ -63,50 +68,37 @@ function showBotTyping() {
 }
 
 /**
- * Removes the bot typing indicator from the chat screen
- */
- function hideBotTyping() {
-  $("#botAvatar").remove();
-  $(".botTyping").remove();
-}
-
-/**
  * Sets user response on the chat screen
  * @param {String} message user message
  */
 function setUserResponse(message) {
   const user_response =  `
     <img class="userAvatar" src="${userPic}">
-      <p class="userMsg">${message}</p>
+    <p class="userMsg">${message}</p>
     <div class="clearfix"></div>`;
   $(user_response).appendTo(".chats").show("fast");
 
-  $(".usrInput").val("");
+  $(".usrInput").val(""); ''
   scrollToBottomOfChat();
   showBotTyping();
-  //$(".suggestions").remove(); // Comment that if you want buttons (suggestions) to stay after pressing on them
+  //$(".suggestions").remove();
 }
 
 /**
  * Adds buttons as a bot response
- * @param {Array} suggestion buttons JSON array
+ * @param {Array} suggestions buttons json array
  */
 function addSuggestion(suggestions) {
   setTimeout(() => {
-    const single_card = `
-      <div class="singleCard">
-        <div class="suggestions">
-          <div class="menu"></div>
-        </div>
-      </div>`;
-    $(single_card).appendTo(".chats").hide().fadeIn(500);
+    $('<div class="singleCard"><div class="suggestions"><div class="menu"></div></div></div>')
+      .appendTo(".chats").hide().fadeIn(500);
     
     for (let i = 0; i < suggestions.length; i += 1) {
-      const menu_chips = `<div class="menuChips" data-payload='${suggestions[i].payload}'>${suggestions[i].title}</div>`
-      $(menu_chips).appendTo("#chats .singleCard:last-of-type .suggestions .menu");
+      $(`<div class="menuChips" data-payload='${suggestions[i].payload}'>${suggestions[i].title}</div>`)
+        .appendTo("#chats .singleCard:last-of-type .suggestions .menu");
     }
 
-    //$("#userInput").prop('disabled', true); // Comment that if you want buttons (suggestions) to stay after pressing on them
+    //$("#userInput").prop('disabled', true);
     scrollToBottomOfChat();
   }, 500);
 }
@@ -116,41 +108,42 @@ function addSuggestion(suggestions) {
  * @param {Array} response json array containing different types of bot response
  */
 function setBotResponse(response) {
+  console.log(response);
   const fadeTime = 500;
-  const timeoutTime = 500;
-
+  const timeoutTime = 1500;
+  
   setTimeout(() => {
     hideBotTyping();
+    
     if (response.length < 1) { // There is no response from Rasa
       const fallbackMsg = "I am facing some issues, please try again later.";
-      const bot_response = `
+      const BotResponse = `
         <img class="botAvatar" src="${botPic}"/>
         <p class="botMsg">${fallbackMsg}</p>
         <div class="clearfix"></div>`;
-
-      $(bot_response).appendTo(".chats").hide().fadeIn(fadeTime);
+      
+      $(BotResponse).appendTo(".chats").hide().fadeIn(fadeTime);
       scrollToBottomOfChat();
-
     } else { // Response received from Rasa
       for (let i = 0; i < response.length; i += 1) {
         if (Object.hasOwnProperty.call(response[i], "text")) { // Response contains "text"
           if (response[i].text != null) {
-            const formatted_text = response[i].text.replace(/(?:\r\n|\r|\n)/g, '<br>')
-            const bot_response = `
+            var formatted_text = response[i].text.replace(/(?:\r\n|\r|\n)/g, '<br>')
+            const BotResponse = `
               <img class="botAvatar" src="${botPic}"/>
               <p class="botMsg">${formatted_text}</p>
               <div class="clearfix"></div>`;
-            $(bot_response).appendTo(".chats").hide().fadeIn(fadeTime);
+            $(BotResponse).appendTo(".chats").hide().fadeIn(fadeTime);
           }
         }
 
-        if (Object.hasOwnProperty.call(response[i], "image")) { // Response contains "image"
+        if (Object.hasOwnProperty.call(response[i], "image")) { // Response contains "images"
           if (response[i].image !== null) {
-            const bot_response = `
+            const BotResponse = `
               <div class="singleCard">
                 <img class="imgcard" src="${response[i].image}">
               </div><div class="clearfix">`;
-            $(bot_response).appendTo(".chats").hide().fadeIn(fadeTime);
+            $(BotResponse).appendTo(".chats").hide().fadeIn(fadeTime);
           }
         }
 
@@ -160,21 +153,36 @@ function setBotResponse(response) {
           }
         }
       }
-
       scrollToBottomOfChat();
     }
   }, timeoutTime);
 }
 
-
-
 /**
- * Sends a message to the bot, so that bot can start the conversation with it
+ * Sends an event to the bot, so that bot can start the conversation with it
  */
 // eslint-disable-next-line no-unused-vars
 function customActionTrigger() {
-  send(initial_message);
+  send("Hello");
   $("#userInput").prop('disabled', false);
+  /*$.ajax({
+    url: rasa_action_endpoint_url,
+    type: "POST",
+    contentType: "application/json",
+    data: JSON.stringify({next_action: action_name, tracker: {sender_id}}),
+    success(botResponse, status) {
+      if (Object.hasOwnProperty.call(botResponse, "responses")) {
+        setBotResponse(botResponse.responses);
+        console.log(JSON.stringify(botResponse));
+      }
+      $("#userInput").prop("disabled", false);
+    },
+    error(xhr, textStatus) {
+      setBotResponse("");
+      console.log("Error from bot end: ", textStatus);
+      $("#userInput").prop("disabled", false);
+    },
+  });*/
 }
 
 /**
@@ -184,12 +192,12 @@ function customActionTrigger() {
 function send(message) {
   // server_url = handoff ? handoff_server_url : rasa_server_url; // UNUSED Human handoff
   server_url = rasa_server_url;
-
+  
   $.ajax({
     url: server_url,
     type: "POST",
     contentType: "application/json",
-    data: JSON.stringify({ message, sender: sender_id }),
+    data: JSON.stringify({message, sender: sender_id}),
     success(botResponse, status) {
       if (message.toLowerCase() === "/restart") { // Restart and clear chat
         $("#userInput").prop("disabled", false);
@@ -201,10 +209,11 @@ function send(message) {
         return;
       }*/
       setBotResponse(botResponse);
+      console.log("Success from bot end: " + botResponse);
     },
     error(xhr, textStatus) {
-      setBotResponse("");
-      console.log("Error from bot end: ", textStatus);
+      setBotResponse('');
+      console.log("Error from bot end: " + textStatus);
     },
   });
 }
@@ -215,16 +224,6 @@ function send(message) {
 function restartConversation() {
   $("#userInput").prop("disabled", true);
   $(".collapsible").remove();
-  
-  if (typeof chatChart !== "undefined") {
-    chatChart.destroy();
-  }
-
-  $(".chart-container").remove();
-
-  if (typeof modalChart !== "undefined") {
-    modalChart.destroy();
-  }
 
   $(".chats").html("");
   $(".usrInput").val("");
@@ -251,17 +250,13 @@ $(".usrInput").on("keyup keypress", (e) => {
       e.preventDefault();
       return false;
     }
-
+    
     //$(".suggestions").remove();
-    $("#paginated_cards").remove();
-    $(".quickReplies").remove();
     $(".usrInput").blur();
-    $(".dropDownMsg").remove();
 
     setUserResponse(text);
     send(text);
     e.preventDefault();
-
     return false;
   }
   return true;
@@ -275,30 +270,26 @@ $("#sendButton").on("click", (e) => {
     e.preventDefault();
     return false;
   }
-
+  
   //$(".suggestions").remove();
-  $("#paginated_cards").remove();
-  $(".quickReplies").remove();
   $(".usrInput").blur();
-  $(".dropDownMsg").remove();
 
   setUserResponse(text);
   send(text);
   e.preventDefault();
-
   return false;
 });
 
 
 
-// Toggle the chatbot widget
-$("#profile_div").on("click", function() {
+// Toggle the chatbot screen
+$("#profile_div").click(() => {
   $(".profile_div").toggle();
   $(".chat_widget").toggle();
 });
 
 // "Clear" button clears the chat contents
-$("#clear-chat").on("click", function() {
+$("#clear-chat").click(() => {
   $(".chats").fadeOut("normal", () => {
     $(".chats").html("");
     $(".chats").fadeIn();
@@ -306,36 +297,35 @@ $("#clear-chat").on("click", function() {
 });
 
 // "Close" button closes the widget
-$("#close-chat").on("click", function() {
+$("#close-chat").click(() => {
   $(".profile_div").toggle();
   $(".chat_widget").toggle();
   scrollToBottomOfChat();
 });
 
 // "Close" arrow closes the widget
-$("#close-chat-arrow").on("click", function() {
+$("#close-chat-arrow").click(() => {
   $(".profile_div").toggle();
   $(".chat_widget").toggle();
   scrollToBottomOfChat();
 });
 
 // "Restart" button triggers restartConversation function
-$("#restart-chat").on("click", function() {
+$("#restart-chat").click(() => {
   restartConversation();
 });
 
 // "Request Human" button triggers requestHuman function
-$("#handoff-chat").on("click", function() {
+$("#handoff-chat").click(() => {
   requestHuman();
 });
 
 
 
-// On click of a suggestion button, send the payload to Rasa and display the title
+// On click of the suggestion button, get the title value and send it to Rasa
 $(document).on("click", ".menu .menuChips", function () {
   const text = this.innerText;
   const payload = this.getAttribute("data-payload");
-
   setUserResponse(text);
   send(payload);
   //$(".suggestions").remove();

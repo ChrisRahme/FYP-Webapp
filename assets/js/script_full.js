@@ -5,12 +5,12 @@
 /* eslint-disable no-console */
 /* eslint-disable camelcase */
 
-// const rasa_action_endpoint_url = "http://localhost:5055/webhook";
-// const rasa_server_url = "http://localhost:5005/webhooks/rest/webhook";
-const IP = "194.126.17.114";
-const rasa_action_endpoint_url = `http://${IP}/webhook`;
-const rasa_server_url = `http://${IP}/webhooks/rest/webhook`;
-// const handoff_server_url = `http://${IP}/webhooks/rest/webhook`; // UNUSED Human handoff
+const rasa_action_endpoint_url = "http://localhost:5055/webhook";
+const rasa_server_url = "http://localhost:5005/webhooks/rest/webhook";
+//const IP = "194.126.17.114";
+//const rasa_action_endpoint_url = `http://${IP}/webhook`;
+//const rasa_server_url = `http://${IP}/webhooks/rest/webhook`;
+//const handoff_server_url = `http://${IP}/webhooks/rest/webhook`; // UNUSED Human handoff
 
 const botPic  = "./assets/img/botAvatar.png";
 const userPic = "./assets/img/userAvatar.png";
@@ -107,7 +107,7 @@ function addSuggestion(suggestions) {
 }
 
 /**
- * Creates horizontally placed cards carousel
+ * UNUSED Creates horizontally placed cards carousel
  * @param {Array} cardsData json array
  */
 function createCardsCarousel(cardsData) {
@@ -143,7 +143,7 @@ function createCardsCarousel(cardsData) {
 }
 
 /**
- * Appends cards carousel on to the chat screen
+ * UNUSED Appends cards carousel on to the chat screen
  * @param {Array} cardsToAdd json array
  */
 function showCardsCarousel(cardsToAdd) {
@@ -230,7 +230,7 @@ function showQuickReplies(quickRepliesData) {
 }
 
 /**
- * Renders PDF attachment on the chat screen
+ * UNUSED Renders PDF attachment on the chat screen
  * @param {Object} pdf_data json object
  */
 function renderPdfAttachment(pdf_data) {
@@ -253,7 +253,7 @@ function renderPdfAttachment(pdf_data) {
 }
 
 /**
- * Renders the dropdown message and handles the user selection
+ * UNUSED Renders the dropdown message and handles the user selection
  * @param {Array} drop_down_data json array
  */
 function renderDropDwon(drop_down_data) {
@@ -293,7 +293,7 @@ function renderDropDwon(drop_down_data) {
 }
 
 /**
- * Sends the user location to Rasa
+ * UNUSED Sends the user location to Rasa
  * @param {Object} position json object
  */
 function getUserPosition(position) {
@@ -306,7 +306,7 @@ function getUserPosition(position) {
 }
 
 /**
- * Handles error while accessing the user's geolocation
+ * UNUSED Handles error while accessing the user's geolocation
  * @param {Object} error json object
  */
 function handleLocationAccessError(error) {
@@ -336,7 +336,7 @@ function handleLocationAccessError(error) {
 }
 
 /**
- * Fetches the user location from the browser
+ * UNUSED Fetches the user location from the browser
  */
 function getLocation() {
   if (navigator.geolocation) {
@@ -350,7 +350,7 @@ function getLocation() {
 }
 
 /**
- * Creates collapsible (https://materializecss.com/collapsible.html)
+ * UNUSED Creates collapsible (https://materializecss.com/collapsible.html)
  * @param {Array} collapsible_date json array
  */
 function createCollapsible(collapsible_data) {
@@ -379,7 +379,7 @@ function createCollapsible(collapsible_data) {
 }
 
 /**
- *  Creates a div that will render the charts in canvas as required by charts.js (https://chartjs.org/docs/latest/getting-started/usage.html)
+ * UNUSED Creates a div that will render the charts in canvas as required by charts.js (https://chartjs.org/docs/latest/getting-started/usage.html)
  * @param {String} title chart title
  * @param {Array} labels chart label
  * @param {Array} backgroundColor chart's background color
@@ -444,7 +444,7 @@ function createChart(title, labels, backgroundColor, chartsData, chartType, disp
 }
 
 /**
- * Creates a modal that will render the charts in canvas as required by charts.js (https://www.chartjs.org/docs/latest/getting-started/usage.html)
+ * UNUSED Creates a modal that will render the charts in canvas as required by charts.js (https://www.chartjs.org/docs/latest/getting-started/usage.html)
  * If you want to display the charts in modal, make sure you have configured the modal in `index.html`
  * @param {String} title chart title
  * @param {Array} labels chart label
@@ -497,18 +497,20 @@ function createChartinModal(title, labels, backgroundColor, chartsData, chartTyp
  * @param {Array} response json array containing different types of bot response
  */
 function setBotResponse(response) {
+  console.log(response);
   const fadeTime = 500;
-  const timeoutTime = 500;
-
+  const timeoutTime = 1500;
+  
   setTimeout(() => {
     hideBotTyping();
+    
     if (response.length < 1) { // There is no response from Rasa or human
       const fallbackMsg = "I am facing some issues, please try again later.";
       const BotResponse = `
         <img class="botAvatar" src="${botPic}"/>
         <p class="botMsg">${fallbackMsg}</p>
         <div class="clearfix"></div>`;
-
+      
       $(BotResponse).appendTo(".chats").hide().fadeIn(fadeTime);
       scrollToBottomOfChat();
     } else { // Response received from Rasa or human
@@ -662,7 +664,7 @@ function customActionTrigger() {
 function send(message) {
   // server_url = handoff ? handoff_server_url : rasa_server_url; // UNUSED Human handoff
   server_url = rasa_server_url;
-
+  
   $.ajax({
     url: server_url,
     type: "POST",
@@ -679,10 +681,11 @@ function send(message) {
         return;
       }*/
       setBotResponse(botResponse);
+      console.log("Success from bot end: " + botResponse);
     },
     error(xhr, textStatus) {
-      setBotResponse("");
-      console.log("Error from bot end: ", textStatus);
+      setBotResponse('');
+      console.log("Error from bot end: " + textStatus);
     },
   });
 }
