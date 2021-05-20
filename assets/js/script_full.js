@@ -681,11 +681,11 @@ function send(message) {
         return;
       }*/
       setBotResponse(botResponse);
-      console.log("Success from bot end: " + botResponse);
+      console.log("Success from bot's end:");
     },
     error(xhr, textStatus) {
       setBotResponse('');
-      console.log("Error from bot end: " + textStatus);
+      console.log("Error from bot's end: " + textStatus);
     },
   });
 }
